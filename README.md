@@ -1,73 +1,217 @@
-# Welcome to your Lovable project
+# Portfolio Greg - Technicien Infrastructure & Réseaux
 
-## Project info
+Portfolio professionnel présentant les projets et compétences techniques de Greg, Technicien SISR (Services Informatiques aux Organisations - Solutions d'Infrastructure, Systèmes et Réseaux).
 
-**URL**: https://lovable.dev/projects/e26cad73-5c07-4cd3-9ecd-428b562208d9
+## 🚀 Technologies utilisées
 
-## How can I edit this code?
+- **React 18** avec TypeScript
+- **Vite** pour un build ultra-rapide
+- **Tailwind CSS** pour le styling
+- **shadcn/ui** pour les composants UI
+- **React Router** pour la navigation
 
-There are several ways of editing your application.
+## 📋 Prérequis
 
-**Use Lovable**
+- Node.js 18+ et npm
+- Un serveur web (Nginx recommandé)
+- Certificat SSL (Let's Encrypt)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e26cad73-5c07-4cd3-9ecd-428b562208d9) and start prompting.
+## 🛠️ Installation en local
 
-Changes made via Lovable will be committed automatically to this repo.
+```bash
+# Cloner le projet
+git clone <votre-repo>
+cd portfolio-greg
 
-**Use your preferred IDE**
+# Installer les dépendances
+npm install
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Lancer en mode développement
 npm run dev
+
+# Build pour production
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+## 🌐 Déploiement sur VPS Debian 12
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 1. Préparer le VPS
 
-**Use GitHub Codespaces**
+```bash
+# Mettre à jour le système
+sudo apt update && sudo apt upgrade -y
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Installer Node.js 18+
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
 
-## What technologies are used for this project?
+# Installer Nginx
+sudo apt install -y nginx
 
-This project is built with:
+# Installer Certbot pour Let's Encrypt
+sudo apt install -y certbot python3-certbot-nginx
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### 2. Build du projet
 
-## How can I deploy this project?
+```bash
+# Sur votre machine locale ou sur le VPS
+npm run build
 
-Simply open [Lovable](https://lovable.dev/projects/e26cad73-5c07-4cd3-9ecd-428b562208d9) and click on Share -> Publish.
+# Le dossier 'dist' contient les fichiers statiques à déployer
+```
 
-## Can I connect a custom domain to my Lovable project?
+### 3. Configuration Nginx
 
-Yes, you can!
+Créer le fichier `/etc/nginx/sites-available/portfolio-greg` :
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```nginx
+server {
+    listen 80;
+    server_name votre-domaine.fr www.votre-domaine.fr;
+    
+    root /var/www/portfolio-greg/dist;
+    index index.html;
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Cache des assets statiques
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
+```
+
+Activer le site :
+
+```bash
+sudo ln -s /etc/nginx/sites-available/portfolio-greg /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### 4. Déployer les fichiers
+
+```bash
+# Créer le dossier de destination
+sudo mkdir -p /var/www/portfolio-greg
+
+# Copier les fichiers (via SCP, Git, ou autre)
+sudo cp -r dist/* /var/www/portfolio-greg/
+
+# Définir les permissions
+sudo chown -R www-data:www-data /var/www/portfolio-greg
+sudo chmod -R 755 /var/www/portfolio-greg
+```
+
+### 5. Configurer SSL avec Let's Encrypt
+
+```bash
+# Obtenir et configurer le certificat SSL
+sudo certbot --nginx -d votre-domaine.fr -d www.votre-domaine.fr
+
+# Le renouvellement automatique est déjà configuré
+# Tester le renouvellement :
+sudo certbot renew --dry-run
+```
+
+### 6. Optimisations supplémentaires
+
+#### A. Configurer le firewall
+
+```bash
+sudo ufw allow 'Nginx Full'
+sudo ufw allow OpenSSH
+sudo ufw enable
+```
+
+#### B. Configuration Nginx avancée
+
+Ajouter dans `/etc/nginx/nginx.conf` (section http) :
+
+```nginx
+# Sécurité
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header X-XSS-Protection "1; mode=block" always;
+add_header Referrer-Policy "no-referrer-when-downgrade" always;
+
+# Performance
+client_max_body_size 10M;
+keepalive_timeout 65;
+```
+
+## 📁 Structure du projet
+
+```
+portfolio-greg/
+├── src/
+│   ├── assets/           # Images et fichiers statiques
+│   ├── components/       # Composants React réutilisables
+│   │   ├── ui/          # Composants shadcn/ui
+│   │   ├── Navigation.tsx
+│   │   ├── Footer.tsx
+│   │   └── Layout.tsx
+│   ├── pages/           # Pages du portfolio
+│   │   ├── Home.tsx
+│   │   ├── Projects.tsx
+│   │   ├── Skills.tsx
+│   │   └── Contact.tsx
+│   ├── App.tsx
+│   ├── index.css
+│   └── main.tsx
+├── public/              # Fichiers publics (CV, etc.)
+└── dist/               # Build de production (généré)
+```
+
+## 🎨 Personnalisation
+
+### Couleurs
+Le design system est défini dans `src/index.css` :
+- Couleur principale : Anthracite `#383C40`
+- Accent : Cyan moderne
+- Police : Inter
+
+### Contenu
+Modifier les fichiers dans `src/pages/` pour personnaliser :
+- **Home.tsx** : Page d'accueil et présentation
+- **Projects.tsx** : Liste des projets
+- **Skills.tsx** : Compétences techniques
+- **Contact.tsx** : Formulaire de contact
+
+## 🔒 Sécurité
+
+- HTTPS forcé via Let's Encrypt
+- Headers de sécurité configurés dans Nginx
+- Protection contre les injections XSS
+- Validation des inputs côté client
+
+## 📈 Performance
+
+- Build optimisé avec Vite
+- Compression Gzip activée
+- Cache des assets statiques (1 an)
+- Images optimisées
+
+## 🤝 Support
+
+Pour toute question ou problème :
+- Email : contact@greg-portfolio.fr
+- LinkedIn : [Profil LinkedIn]
+
+## 📄 Licence
+
+Projet personnel - Tous droits réservés
+
+---
+
+**Développé avec ❤️ par Greg** | Technicien SISR

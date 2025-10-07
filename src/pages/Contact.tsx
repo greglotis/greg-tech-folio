@@ -1,0 +1,188 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail, Linkedin, MapPin, Phone } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+const Contact = () => {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Pour l'instant, on simule l'envoi
+    toast({
+      title: "Message envoyé !",
+      description: "Je vous répondrai dans les plus brefs délais.",
+    });
+    
+    setFormData({ name: "", email: "", subject: "", message: "" });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  return (
+    <div className="min-h-screen pt-24 pb-20 px-4">
+      <div className="container mx-auto max-w-5xl">
+        <div className="text-center mb-12 animate-fade-in">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Me <span className="text-gradient">Contacter</span>
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Une question, un projet, une opportunité ? N'hésitez pas à me contacter.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* Contact info cards */}
+          <div className="space-y-6">
+            <Card className="shadow-soft hover:shadow-medium transition-smooth">
+              <CardHeader>
+                <div className="p-3 bg-accent/10 rounded-lg w-fit mb-2">
+                  <Mail className="text-accent" size={24} />
+                </div>
+                <CardTitle className="text-lg">Email</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <a 
+                  href="mailto:contact@greg-portfolio.fr" 
+                  className="text-muted-foreground hover:text-accent transition-smooth"
+                >
+                  contact@greg-portfolio.fr
+                </a>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-soft hover:shadow-medium transition-smooth">
+              <CardHeader>
+                <div className="p-3 bg-accent/10 rounded-lg w-fit mb-2">
+                  <Linkedin className="text-accent" size={24} />
+                </div>
+                <CardTitle className="text-lg">LinkedIn</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <a 
+                  href="https://linkedin.com" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-accent transition-smooth"
+                >
+                  linkedin.com/in/greg
+                </a>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-soft hover:shadow-medium transition-smooth">
+              <CardHeader>
+                <div className="p-3 bg-accent/10 rounded-lg w-fit mb-2">
+                  <MapPin className="text-accent" size={24} />
+                </div>
+                <CardTitle className="text-lg">Localisation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  France<br />
+                  Disponible pour opportunités
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Contact form */}
+          <div className="md:col-span-2">
+            <Card className="shadow-soft">
+              <CardHeader>
+                <CardTitle className="text-2xl">Envoyez-moi un message</CardTitle>
+                <CardDescription>
+                  Remplissez le formulaire ci-dessous et je vous répondrai rapidement.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-sm font-medium">
+                        Nom complet
+                      </label>
+                      <Input
+                        id="name"
+                        name="name"
+                        placeholder="Votre nom"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Email
+                      </label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="votre@email.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="subject" className="text-sm font-medium">
+                      Sujet
+                    </label>
+                    <Input
+                      id="subject"
+                      name="subject"
+                      placeholder="Objet de votre message"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium">
+                      Message
+                    </label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      placeholder="Votre message..."
+                      rows={6}
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <Button type="submit" size="lg" className="w-full">
+                    Envoyer le message
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Contact;
