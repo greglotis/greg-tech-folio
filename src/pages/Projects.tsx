@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Server, Network, Shield, Phone, Database, Cloud } from "lucide-react";
+import { Server, Network, Shield, Phone, Database } from "lucide-react";
 
 const Projects = () => {
   const projects = [
@@ -57,17 +57,6 @@ const Projects = () => {
         "Pare-feu pfSense multi-WAN",
         "VPN site-à-site et client",
         "Monitoring avec Nagios"
-      ]
-    },
-    {
-      title: "Cloud & Sauvegarde",
-      description: "Mise en place de solutions cloud hybrides et stratégies de sauvegarde automatisées.",
-      icon: Cloud,
-      technologies: ["AWS", "Azure", "Veeam", "Rsync", "Scripts"],
-      achievements: [
-        "Migration vers infrastructure hybride",
-        "Sauvegardes automatisées quotidiennes",
-        "Plan de reprise d'activité (PRA)"
       ]
     }
   ];
