@@ -1,62 +1,59 @@
-import { useEffect, useRef, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { 
+  Server, 
+  Network, 
+  Shield, 
+  Database, 
+  HardDrive,
+  Globe,
+  Lock,
+  Wifi,
+  Monitor,
+  Cloud,
+  FileText,
+  Phone,
+  Activity,
+  Boxes
+} from "lucide-react";
+import { LucideIcon } from "lucide-react";
 
 interface Skill {
   name: string;
-  level: number;
+  icon: LucideIcon;
   category: string;
 }
 
 const Skills = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
   const skills: Skill[] = [
     // Systèmes
-    { name: "Windows Server", level: 90, category: "Systèmes" },
-    { name: "Linux (Debian/Ubuntu)", level: 85, category: "Systèmes" },
-    { name: "Active Directory", level: 88, category: "Systèmes" },
-    { name: "Virtualisation (Proxmox)", level: 85, category: "Systèmes" },
+    { name: "Windows Server", icon: Monitor, category: "Systèmes" },
+    { name: "Linux (Debian/Ubuntu)", icon: Server, category: "Systèmes" },
+    { name: "Active Directory", icon: Database, category: "Systèmes" },
+    { name: "Virtualisation (Proxmox)", icon: Boxes, category: "Systèmes" },
     
     // Réseau
-    { name: "Cisco IOS", level: 82, category: "Réseau" },
-    { name: "VLANs & Routage", level: 88, category: "Réseau" },
-    { name: "VPN & Sécurité réseau", level: 80, category: "Réseau" },
-    { name: "TCP/IP", level: 90, category: "Réseau" },
+    { name: "Cisco IOS", icon: Network, category: "Réseau" },
+    { name: "VLANs & Routage", icon: Wifi, category: "Réseau" },
+    { name: "VPN & Sécurité réseau", icon: Lock, category: "Réseau" },
+    { name: "TCP/IP", icon: Globe, category: "Réseau" },
     
     // Services
-    { name: "GLPI", level: 85, category: "Services" },
-    { name: "DNS & DHCP", level: 88, category: "Services" },
-    { name: "3CX / VoIP", level: 75, category: "Services" },
-    { name: "Apache / Nginx", level: 80, category: "Services" },
+    { name: "GLPI", icon: FileText, category: "Services" },
+    { name: "DNS & DHCP", icon: Server, category: "Services" },
+    { name: "3CX / VoIP", icon: Phone, category: "Services" },
+    { name: "Apache / Nginx", icon: Cloud, category: "Services" },
     
     // Sécurité & Monitoring
-    { name: "pfSense", level: 82, category: "Sécurité" },
-    { name: "Backup & PRA", level: 85, category: "Sécurité" },
-    { name: "Monitoring (Nagios)", level: 75, category: "Sécurité" },
+    { name: "pfSense", icon: Shield, category: "Sécurité" },
+    { name: "Backup & PRA", icon: HardDrive, category: "Sécurité" },
+    { name: "Monitoring (Nagios)", icon: Activity, category: "Sécurité" },
   ];
 
   const categories = Array.from(new Set(skills.map(s => s.category)));
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4" ref={sectionRef}>
-      <div className="container mx-auto max-w-5xl">
+    <div className="min-h-screen pt-24 pb-20 px-4">
+      <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12 animate-fade-in">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Mes <span className="text-gradient">Compétences</span>
@@ -78,27 +75,28 @@ const Skills = () => {
                 {category}
               </h2>
               
-              <div className="grid gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {skills
                   .filter(skill => skill.category === category)
-                  .map((skill, index) => (
-                    <div key={index} className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">{skill.name}</span>
-                        <span className="text-sm text-muted-foreground">{skill.level}%</span>
-                      </div>
-                      
-                      <div className="h-3 bg-muted rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-accent to-secondary rounded-full transition-all duration-1000 ease-out"
-                          style={{
-                            width: isVisible ? `${skill.level}%` : '0%',
-                            transitionDelay: `${index * 0.1}s`
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                  .map((skill, index) => {
+                    const Icon = skill.icon;
+                    
+                    return (
+                      <Card 
+                        key={index}
+                        className="group hover:shadow-hover hover:border-accent/50 transition-smooth cursor-pointer"
+                      >
+                        <CardContent className="flex flex-col items-center justify-center p-6 space-y-3">
+                          <div className="p-4 bg-accent/10 rounded-xl group-hover:bg-accent/20 group-hover:scale-110 transition-smooth">
+                            <Icon className="text-accent" size={32} />
+                          </div>
+                          <h3 className="text-sm font-medium text-center leading-tight">
+                            {skill.name}
+                          </h3>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
               </div>
             </div>
           ))}
