@@ -188,6 +188,10 @@ Modifier les fichiers dans `src/pages/` pour personnaliser :
 - **Skills.tsx** : Compétences techniques
 - **Contact.tsx** : Formulaire de contact
 
+### Administration du contenu
+- Rendez-vous sur `/admin` (lien disponible depuis le bouton « Accéder à l'admin » sur la page d'accueil ou dans la navigation) pour ajouter, modifier ou supprimer des projets et compétences.
+- Les modifications sont stockées dans votre navigateur (localStorage). Utilisez le bouton de réinitialisation pour revenir aux données par défaut.
+
 ## 🔒 Sécurité
 
 - HTTPS forcé via Let's Encrypt

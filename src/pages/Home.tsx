@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, Download, ArrowRight } from "lucide-react";
+import { Linkedin, Download, ArrowRight, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import profilePhoto from "@/assets/profile-photo.jpg";
 import { usePortfolioData } from "@/lib/portfolio-data";
@@ -38,19 +38,26 @@ const Home = () => {
                     <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
                   </Link>
                 </Button>
-                
+
                 <Button asChild variant="outline" size="lg">
                   <a href="/cv-greg.pdf" download>
                     <Download className="mr-2" size={18} />
                     Télécharger CV
                   </a>
                 </Button>
-                
+
                 <Button asChild variant="ghost" size="lg">
                   <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
                     <Linkedin className="mr-2" size={18} />
                     LinkedIn
                   </a>
+                </Button>
+
+                <Button asChild variant="secondary" size="lg">
+                  <Link to="/admin" className="group">
+                    <Settings className="mr-2 group-hover:rotate-12 transition-transform" size={18} />
+                    Accéder à l'admin
+                  </Link>
                 </Button>
               </div>
             </div>
