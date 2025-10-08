@@ -1,4 +1,6 @@
-import { Linkedin, Github, Mail } from "lucide-react";
+import { Download, Github, Linkedin, Mail } from "lucide-react";
+
+import { Button } from "./ui/button";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -11,7 +13,18 @@ const Footer = () => {
             © {currentYear} Greg - Technicien Infrastructure & Réseaux
           </p>
           
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col items-center gap-4 sm:flex-row">
+            <Button
+              asChild
+              variant="secondary"
+              className="bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+            >
+              <a href="/referentiel.pdf" download>
+                <Download className="size-4" />
+                Télécharger le référentiel
+              </a>
+            </Button>
+
             <a
               href="https://linkedin.com"
               target="_blank"
