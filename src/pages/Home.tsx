@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, Download, ArrowRight } from "lucide-react";
+import { Linkedin, Download, ArrowRight, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import profilePhoto from "@/assets/profile-photo.jpg";
+import { usePortfolioData } from "@/lib/portfolio-data";
 
 const Home = () => {
+  const { projects, skills } = usePortfolioData();
+  const projectCountLabel = projects.length > 0 ? `${projects.length}+` : "0";
+  const skillCountLabel = skills.length > 0 ? `${skills.length}+` : "0";
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -33,19 +38,26 @@ const Home = () => {
                     <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
                   </Link>
                 </Button>
-                
+
                 <Button asChild variant="outline" size="lg">
                   <a href="/cv-greg.pdf" download>
                     <Download className="mr-2" size={18} />
                     Télécharger CV
                   </a>
                 </Button>
-                
+
                 <Button asChild variant="ghost" size="lg">
                   <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
                     <Linkedin className="mr-2" size={18} />
                     LinkedIn
                   </a>
+                </Button>
+
+                <Button asChild variant="secondary" size="lg">
+                  <Link to="/admin" className="group">
+                    <Settings className="mr-2 group-hover:rotate-12 transition-transform" size={18} />
+                    Accéder à l'admin
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -70,15 +82,15 @@ const Home = () => {
         <div className="container mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center space-y-2 p-6 rounded-lg bg-card shadow-soft hover:shadow-medium transition-smooth">
-              <div className="text-3xl font-bold text-accent">5+</div>
+              <div className="text-3xl font-bold text-accent">{projectCountLabel}</div>
               <p className="text-muted-foreground">Projets réalisés</p>
             </div>
-            
+
             <div className="text-center space-y-2 p-6 rounded-lg bg-card shadow-soft hover:shadow-medium transition-smooth">
-              <div className="text-3xl font-bold text-accent">10+</div>
+              <div className="text-3xl font-bold text-accent">{skillCountLabel}</div>
               <p className="text-muted-foreground">Technologies maîtrisées</p>
             </div>
-            
+
             <div className="text-center space-y-2 p-6 rounded-lg bg-card shadow-soft hover:shadow-medium transition-smooth">
               <div className="text-3xl font-bold text-accent">100%</div>
               <p className="text-muted-foreground">Engagement professionnel</p>
@@ -104,6 +116,42 @@ const Home = () => {
               Mon approche orientée solution me permet de répondre efficacement aux besoins 
               techniques des organisations.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Professional experiences */}
+      <section className="py-20 px-4 bg-muted/20">
+        <div className="container mx-auto max-w-5xl">
+          <h2 className="text-3xl font-bold mb-12 text-center">Expériences Professionnelles</h2>
+          <div className="grid gap-8 md:grid-cols-2">
+            <div className="p-8 rounded-xl bg-card shadow-soft hover:shadow-medium transition-smooth">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-semibold">Stage - SF2i</h3>
+                <span className="text-sm font-medium text-muted-foreground">2023</span>
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Immersion au sein de l'équipe d'infogérance pour assurer la disponibilité des
+                infrastructures clients. Participation au maintien en conditions opérationnelles
+                des serveurs, à la mise en place de solutions de sauvegarde et à la supervision
+                de réseaux multi-sites. Contribution aux interventions sur site pour le
+                déploiement de matériels et la résolution d'incidents utilisateurs.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-xl bg-card shadow-soft hover:shadow-medium transition-smooth">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-semibold">Alternance - Mairie de Nouméa</h3>
+                <span className="text-sm font-medium text-muted-foreground">2023 - Aujourd'hui</span>
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Membre de l'équipe numérique de la collectivité avec un rôle polyvalent : support
+                utilisateur de niveau 2, gestion du parc et des comptes Active Directory, suivi des
+                projets de modernisation du SI et automatisation de tâches récurrentes. Mise en
+                œuvre de bonnes pratiques de sécurité, rédaction de procédures et coordination avec
+                les prestataires externes pour garantir la continuité des services municipaux.
+              </p>
+            </div>
           </div>
         </div>
       </section>
