@@ -165,6 +165,8 @@ portfolio-greg/
 │   │   ├── Home.tsx
 │   │   ├── Projects.tsx
 │   │   ├── Skills.tsx
+│   │   ├── Certifications.tsx
+│   │   ├── TechWatch.tsx
 │   │   └── Contact.tsx
 │   ├── App.tsx
 │   ├── index.css
@@ -186,7 +188,13 @@ Modifier les fichiers dans `src/pages/` pour personnaliser :
 - **Home.tsx** : Page d'accueil et présentation
 - **Projects.tsx** : Liste des projets
 - **Skills.tsx** : Compétences techniques
+- **Certifications.tsx** : Parcours de certifications professionnelles
+- **TechWatch.tsx** : Veille technologique et axes de surveillance
 - **Contact.tsx** : Formulaire de contact
+
+### Administration du contenu
+- Rendez-vous sur `/admin` (lien disponible depuis le bouton « Accéder à l'admin » sur la page d'accueil ou dans la navigation) pour ajouter, modifier ou supprimer des projets et compétences.
+- Les modifications sont stockées dans votre navigateur (localStorage). Utilisez le bouton de réinitialisation pour revenir aux données par défaut.
 
 ## 🔒 Sécurité
 
