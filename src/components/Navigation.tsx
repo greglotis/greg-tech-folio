@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Briefcase, Award, Radar, Mail, Settings } from "lucide-react";
+import { Home, Briefcase, Award, BadgeCheck, Radar, Mail, Settings } from "lucide-react";
 
 const Navigation = () => {
   const location = useLocation();
@@ -8,6 +8,7 @@ const Navigation = () => {
     { path: "/", label: "Accueil", icon: Home },
     { path: "/projets", label: "Projets", icon: Briefcase },
     { path: "/competences", label: "Compétences", icon: Award },
+    { path: "/certifications", label: "Certifications", icon: BadgeCheck },
     { path: "/veille-technologique", label: "Veille technologique", icon: Radar },
     { path: "/contact", label: "Contact", icon: Mail },
     { path: "/admin", label: "Admin", icon: Settings },

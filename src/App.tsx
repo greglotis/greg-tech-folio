@@ -7,6 +7,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import Skills from "./pages/Skills";
+import Certifications from "./pages/Certifications";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
@@ -27,6 +28,7 @@ const App = () => (
               <Route path="/" element={<Home />} />
               <Route path="/projets" element={<Projects />} />
               <Route path="/competences" element={<Skills />} />
+              <Route path="/certifications" element={<Certifications />} />
               <Route path="/veille-technologique" element={<TechWatch />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin" element={<Admin />} />
