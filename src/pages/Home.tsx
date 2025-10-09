@@ -23,7 +23,7 @@ const Home = () => {
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 Bonjour, je suis{" "}
-                <span className="text-gradient">Greg</span>
+                <span className="text-gradient"> LAMATAKI Greg </span>
               </h1>
               
               <p className="text-lg text-muted-foreground leading-relaxed">
@@ -40,7 +40,7 @@ const Home = () => {
                 </Button>
 
                 <Button asChild variant="outline" size="lg">
-                  <a href="/cv-greg.pdf" download>
+                  <a href="/Greg-cv.pdf" download>
                     <Download className="mr-2" size={18} />
                     Télécharger CV
                   </a>
