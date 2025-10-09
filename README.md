@@ -150,6 +150,65 @@ client_max_body_size 10M;
 keepalive_timeout 65;
 ```
 
+## 🐳 Déploiement Docker + Nginx
+
+Si votre serveur dispose déjà de Docker et d'un reverse-proxy Nginx (cas d'usage courant sur un VPS), vous pouvez construire et
+exécuter le portfolio dans un conteneur autonome. Le Dockerfile multi-étapes fourni génère le build optimisé Vite puis le sert
+via Nginx.
+
+### 1. Construire l'image
+
+```bash
+# Depuis la racine du projet
+docker build -t greg-portfolio:latest .
+```
+
+### 2. Lancer le conteneur
+
+```bash
+# Exemple : exposer l'application sur le port 8080 de l'hôte
+docker run -d \
+  --name greg-portfolio \
+  --restart unless-stopped \
+  -p 8080:80 \
+  greg-portfolio:latest
+```
+
+Le serveur Nginx embarqué sert les fichiers statiques sur le port 80 du conteneur. Exposez ce port selon votre architecture.
+
+### 3. Intégrer avec votre reverse-proxy Nginx
+
+Si un reverse-proxy Nginx externe est déjà en place (par exemple un conteneur séparé gérant plusieurs sites) :
+
+```bash
+# Placer les conteneurs sur le même réseau Docker
+docker network create web || true
+docker network connect web greg-portfolio
+docker network connect web nginx-proxy   # adapter au nom de votre conteneur Nginx
+```
+
+Configurez ensuite votre vhost Nginx pour pointer vers `http://greg-portfolio:80`. Exemple minimal :
+
+```nginx
+location / {
+    proxy_pass http://greg-portfolio:80;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+```
+
+Le conteneur peut être mis à jour en reconstruisant l'image puis en redémarrant :
+
+```bash
+docker build -t greg-portfolio:latest .
+docker stop greg-portfolio && docker rm greg-portfolio
+docker run -d --name greg-portfolio --restart unless-stopped -p 8080:80 greg-portfolio:latest
+```
+
+Pensez à automatiser le déploiement (GitHub Actions, GitLab CI, Watchtower…) pour maintenir l'application à jour.
+
 ## 📁 Structure du projet
 
 ```
