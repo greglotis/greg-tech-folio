@@ -3,6 +3,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode
 } from "react";
@@ -226,6 +227,10 @@ const sanitizeStoredData = (data: unknown, fallback: StoredData): StoredData => 
 };
 
 export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => {
+  const defaultDataRef = useRef<StoredData>({
+    projects: cloneProjects(DEFAULT_PROJECTS),
+    skills: cloneSkills(DEFAULT_SKILLS)
+  });
   const [projects, setProjects] = useState<Project[]>(() => cloneProjects(DEFAULT_PROJECTS));
   const [skills, setSkills] = useState<Skill[]>(() => cloneSkills(DEFAULT_SKILLS));
   const [isLoaded, setIsLoaded] = useState(false);
@@ -236,24 +241,68 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
       return;
     }
 
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
+    let isCancelled = false;
 
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        const sanitized = sanitizeStoredData(parsed, {
-          projects: DEFAULT_PROJECTS,
-          skills: DEFAULT_SKILLS
-        });
+    const loadData = async () => {
+      let hasLoaded = false;
 
-        setProjects(cloneProjects(sanitized.projects));
-        setSkills(cloneSkills(sanitized.skills));
+      try {
+        const stored = window.localStorage.getItem(STORAGE_KEY);
+
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          const sanitized = sanitizeStoredData(parsed, defaultDataRef.current);
+          const snapshot: StoredData = {
+            projects: cloneProjects(sanitized.projects),
+            skills: cloneSkills(sanitized.skills)
+          };
+
+          if (!isCancelled) {
+            setProjects(snapshot.projects);
+            setSkills(snapshot.skills);
+          }
+
+          hasLoaded = true;
+        }
+      } catch (error) {
+        console.error("Impossible de charger les données du portfolio", error);
       }
-    } catch (error) {
-      console.error("Impossible de charger les données du portfolio", error);
-    } finally {
-      setIsLoaded(true);
-    }
+
+      if (!hasLoaded) {
+        try {
+          const response = await fetch("/portfolio-data.json", { cache: "no-store" });
+
+          if (response.ok) {
+            const parsed = await response.json();
+            const sanitized = sanitizeStoredData(parsed, defaultDataRef.current);
+            const snapshot: StoredData = {
+              projects: cloneProjects(sanitized.projects),
+              skills: cloneSkills(sanitized.skills)
+            };
+
+            if (!isCancelled) {
+              defaultDataRef.current = snapshot;
+              setProjects(snapshot.projects);
+              setSkills(snapshot.skills);
+            }
+
+            hasLoaded = true;
+          }
+        } catch (error) {
+          console.warn("Aucun fichier portfolio-data.json n'a pu être chargé", error);
+        }
+      }
+
+      if (!isCancelled) {
+        setIsLoaded(true);
+      }
+    };
+
+    void loadData();
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -302,8 +351,10 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
       window.localStorage.removeItem(STORAGE_KEY);
     }
 
-    setProjects(cloneProjects(DEFAULT_PROJECTS));
-    setSkills(cloneSkills(DEFAULT_SKILLS));
+    const snapshot = defaultDataRef.current;
+
+    setProjects(cloneProjects(snapshot.projects));
+    setSkills(cloneSkills(snapshot.skills));
   };
 
   const exportData = (): StoredData => ({
