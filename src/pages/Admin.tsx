@@ -1,4 +1,4 @@
-import { useId, useMemo, useState, type FormEvent } from "react";
+import { useId, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   Card,
   CardContent,
@@ -12,7 +12,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { usePortfolioData, type ProjectInput, type SkillInput } from "@/lib/portfolio-data";
+import {
+  usePortfolioData,
+  type ProjectInput,
+  type SkillInput,
+  type PortfolioDataSnapshot
+} from "@/lib/portfolio-data";
 import {
   DEFAULT_ICON,
   IconKey,
@@ -22,6 +27,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import {
   ActivitySquare,
+  FileDown,
+  FileUp,
   Pencil,
   Plus,
   RefreshCcw,
@@ -259,11 +266,14 @@ const Admin = () => {
     addSkill,
     updateSkill,
     deleteSkill,
-    resetData
+    resetData,
+    exportData,
+    importData
   } = usePortfolioData();
   const { toast } = useToast();
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
   const [editingSkillId, setEditingSkillId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const categorySuggestions = useMemo(
     () => Array.from(new Set(skills.map((skill) => skill.category))).sort((a, b) =>
@@ -349,6 +359,72 @@ const Admin = () => {
     });
   };
 
+  const handleExport = () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    try {
+      const snapshot = exportData();
+      const fileContent = JSON.stringify(snapshot, null, 2);
+      const blob = new Blob([fileContent], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const timestamp = new Date().toISOString().split("T")[0];
+
+      link.href = url;
+      link.download = `portfolio-data-${timestamp}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "Export réalisé",
+        description: "Vos données ont été téléchargées au format JSON."
+      });
+    } catch (error) {
+      console.error("Impossible d'exporter les données", error);
+      toast({
+        variant: "destructive",
+        title: "Export impossible",
+        description: "Une erreur est survenue lors de la génération du fichier JSON."
+      });
+    }
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImportChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    try {
+      const content = await file.text();
+      const parsed = JSON.parse(content) as PortfolioDataSnapshot;
+
+      importData(parsed);
+      toast({
+        title: "Import réussi",
+        description: `${file.name} a été importé et appliqué au portfolio.`
+      });
+    } catch (error) {
+      console.error("Impossible d'importer le fichier JSON", error);
+      toast({
+        variant: "destructive",
+        title: "Import impossible",
+        description: "Vérifiez que le fichier est un JSON exporté depuis ce tableau de bord."
+      });
+    } finally {
+      event.target.value = "";
+    }
+  };
+
   return (
     <div className="min-h-screen pt-24 pb-20 px-4">
       <div className="container mx-auto max-w-6xl space-y-12">
@@ -371,6 +447,42 @@ const Admin = () => {
             Réinitialiser les données
           </Button>
         </div>
+
+        <Card className="shadow-soft">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileDown size={18} /> Import / export JSON
+            </CardTitle>
+            <CardDescription>
+              Sauvegardez vos contenus ou restaurez-les à partir d'un fichier JSON partagé.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-muted-foreground">
+            <p>
+              Les modifications sont enregistrées dans votre navigateur. Exportez un fichier JSON pour conserver une copie ou
+              pour transférer vos données vers un autre poste.
+            </p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Le fichier exporté contient vos projets et compétences.</li>
+              <li>Importez-le pour restaurer une sauvegarde ou partager votre configuration.</li>
+            </ul>
+          </CardContent>
+          <CardFooter className="flex flex-col sm:flex-row sm:justify-end gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="application/json"
+              className="hidden"
+              onChange={handleImportChange}
+            />
+            <Button variant="outline" onClick={handleImportClick} className="w-full sm:w-auto">
+              <FileUp className="mr-2" size={16} /> Importer un JSON
+            </Button>
+            <Button onClick={handleExport} className="w-full sm:w-auto">
+              <FileDown className="mr-2" size={16} /> Exporter les données
+            </Button>
+          </CardFooter>
+        </Card>
 
         <section className="space-y-8">
           <div className="space-y-2">

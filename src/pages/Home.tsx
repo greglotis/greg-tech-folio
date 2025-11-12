@@ -53,12 +53,6 @@ const Home = () => {
                   </a>
                 </Button>
 
-                <Button asChild variant="secondary" size="lg">
-                  <Link to="/admin" className="group">
-                    <Settings className="mr-2 group-hover:rotate-12 transition-transform" size={18} />
-                    Accéder à l'admin
-                  </Link>
-                </Button>
               </div>
             </div>
 
