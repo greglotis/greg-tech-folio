@@ -29,15 +29,78 @@ export interface Skill {
 
 export type SkillInput = Omit<Skill, "id">;
 
+// Extended data types for full admin editing
+export interface Certification {
+  id: string;
+  title: string;
+  organization: string;
+  date: string;
+  summary: string;
+  highlights: string[];
+  skills: string[];
+}
+
+export type CertificationInput = Omit<Certification, "id">;
+
+export interface TechTopic {
+  id: string;
+  title: string;
+  description: string;
+  actions: string[];
+}
+
+export type TechTopicInput = Omit<TechTopic, "id">;
+
+export interface TechSource {
+  id: string;
+  label: string;
+  items: string[];
+}
+
+export type TechSourceInput = Omit<TechSource, "id">;
+
+export interface TechRoadmapStep {
+  id: string;
+  period: string;
+  goals: string[];
+}
+
+export type TechRoadmapStepInput = Omit<TechRoadmapStep, "id">;
+
+export interface ContactInfo {
+  email: string;
+  linkedinUrl: string;
+  locationLine1: string;
+  locationLine2?: string;
+}
+
 interface PortfolioDataContextValue {
   projects: Project[];
   skills: Skill[];
+  certifications: Certification[];
+  techTopics: TechTopic[];
+  techSources: TechSource[];
+  techRoadmap: TechRoadmapStep[];
+  contact: ContactInfo;
   addProject: (project: ProjectInput) => void;
   updateProject: (projectId: string, project: ProjectInput) => void;
   deleteProject: (projectId: string) => void;
   addSkill: (skill: SkillInput) => void;
   updateSkill: (skillId: string, skill: SkillInput) => void;
   deleteSkill: (skillId: string) => void;
+  addCertification: (cert: CertificationInput) => void;
+  updateCertification: (certId: string, cert: CertificationInput) => void;
+  deleteCertification: (certId: string) => void;
+  addTechTopic: (topic: TechTopicInput) => void;
+  updateTechTopic: (topicId: string, topic: TechTopicInput) => void;
+  deleteTechTopic: (topicId: string) => void;
+  addTechSource: (source: TechSourceInput) => void;
+  updateTechSource: (sourceId: string, source: TechSourceInput) => void;
+  deleteTechSource: (sourceId: string) => void;
+  addTechRoadmapStep: (step: TechRoadmapStepInput) => void;
+  updateTechRoadmapStep: (stepId: string, step: TechRoadmapStepInput) => void;
+  deleteTechRoadmapStep: (stepId: string) => void;
+  updateContact: (contact: ContactInfo) => void;
   resetData: () => void;
   exportData: () => StoredData;
   importData: (data: unknown) => void;
@@ -48,6 +111,11 @@ const STORAGE_KEY = "portfolio-data";
 type StoredData = {
   projects: Project[];
   skills: Skill[];
+  certifications: Certification[];
+  techTopics: TechTopic[];
+  techSources: TechSource[];
+  techRoadmap: TechRoadmapStep[];
+  contact: ContactInfo;
 };
 
 export type PortfolioDataSnapshot = StoredData;
@@ -138,6 +206,107 @@ const DEFAULT_SKILLS: Skill[] = [
   { id: "monitoring-nagios", name: "Monitoring (Nagios)", category: "Sécurité", icon: "activity" }
 ];
 
+// Nouvelles données par défaut (issues des pages statiques)
+const DEFAULT_CERTIFICATIONS: Certification[] = [
+  {
+    id: "ccna",
+    title: "CCNA: Switching, Routing & Wireless Essentials",
+    organization: "Cisco Networking Academy",
+    date: "2023",
+    summary:
+      "Validation des bases avancées en administration de réseaux, configuration d'équipements Cisco et dépannage d'infrastructures d'entreprise.",
+    highlights: [
+      "Mise en place complète d'une infrastructure LAN/WAN avec VLANs et routage inter-VLAN.",
+      "Configuration des protocoles OSPF et RSTP pour garantir la résilience du réseau.",
+      "Dépannage des déploiements sans-fil et sécurisation des accès."
+    ],
+    skills: ["Routage", "Switching", "Sécurité réseau", "Cisco IOS"]
+  },
+  {
+    id: "az900",
+    title: "Azure Fundamentals (AZ-900)",
+    organization: "Microsoft",
+    date: "2022",
+    summary:
+      "Compréhension des principes du cloud Microsoft Azure, de la sécurité et de la tarification afin d'accompagner les migrations vers les services managés.",
+    highlights: [
+      "Cartographie des services IaaS/PaaS/SaaS adaptés aux besoins d'une collectivité.",
+      "Évaluation des modèles de gouvernance et de gestion des identités Azure AD.",
+      "Analyse budgétaire et mise en place d'alertes de consommation."
+    ],
+    skills: ["Cloud", "Azure", "Sécurité", "FinOps"]
+  },
+  {
+    id: "itil4",
+    title: "ITIL® 4 Foundation",
+    organization: "AXELOS",
+    date: "2021",
+    summary:
+      "Acquisition des bonnes pratiques de gestion des services IT pour améliorer le support aux utilisateurs et la continuité d'activité.",
+    highlights: [
+      "Formalisation d'un catalogue de services et d'indicateurs de suivi.",
+      "Optimisation du processus de gestion des incidents et des demandes.",
+      "Animation d'ateliers d'amélioration continue avec les équipes support."
+    ],
+    skills: ["ITSM", "Gestion des services", "Support utilisateur", "Amélioration continue"]
+  }
+];
+
+const DEFAULT_TECH_TOPICS: TechTopic[] = [
+  { id: "infra-cloud", title: "Infrastructure & Cloud", description: "Surveillance continue des évolutions autour de Proxmox, VMware et des solutions de sauvegarde hybrides.", actions: [
+    "Tests réguliers des versions beta de Proxmox VE pour anticiper les migrations.",
+    "Veille sur la redondance des sauvegardes et sur les solutions de PRA accessibles."
+  ]},
+  { id: "secops", title: "Sécurité Opérationnelle", description: "Suivi des publications CERT-FR, bulletins Microsoft et best practices ANSSI pour renforcer les postes et serveurs.", actions: [
+    "Mise en place d'alertes RSS et newsletters dédiées à la cybersécurité.",
+    "Ateliers internes pour sensibiliser les équipes sur les nouvelles campagnes de phishing."
+  ]},
+  { id: "collab-support", title: "Collaboration & Support", description: "Exploration des outils d'assistance à distance, de ticketing et d'automatisation (GLPI, ITSM, scripts PowerShell).", actions: [
+    "Comparaison des solutions d'inventaire réseau pour optimiser la gestion de parc.",
+    "Expérimentation d'automatisations PowerShell pour accélérer l'onboarding."
+  ]}
+];
+
+const DEFAULT_TECH_SOURCES: TechSource[] = [
+  { id: "blogs", label: "Blogs & Newsletters", items: [
+    "Blog Proxmox, VMware Tech Journal",
+    "CERT-FR, Zataz, ANSSI",
+    "3CX Updates, Microsoft Learn"
+  ]},
+  { id: "communautes", label: "Communautés", items: [
+    "Réseau Proxmox France, forums Spiceworks",
+    "Groupes Discord/Reddit dédiés à la cybersécurité",
+    "Meetups locaux autour de l'IT"
+  ]},
+  { id: "terrain", label: "Sur le terrain", items: [
+    "Retours d'expérience des équipes",
+    "Partage de bonnes pratiques avec la DSI",
+    "Échanges avec les prestataires et partenaires"
+  ]}
+];
+
+const DEFAULT_TECH_ROADMAP: TechRoadmapStep[] = [
+  { id: "t1", period: "Trimestre 1", goals: [
+    "Évaluer les nouveautés Proxmox Backup Server 3.x",
+    "Mettre à jour les scripts de supervision pour les serveurs critiques"
+  ]},
+  { id: "t2", period: "Trimestre 2", goals: [
+    "Tester l'intégration d'une solution EDR adaptée au secteur public",
+    "Documenter une procédure PRA simplifiée pour les sites secondaires"
+  ]},
+  { id: "t3", period: "Trimestre 3", goals: [
+    "Déployer un pilote de gestion de parc automatisée",
+    "Organiser un atelier de sensibilisation sécurité"
+  ]}
+];
+
+const DEFAULT_CONTACT: ContactInfo = {
+  email: "contact@greg-portfolio.fr",
+  linkedinUrl: "https://www.linkedin.com/in/greg-lamataki-5794b22b7/",
+  locationLine1: "France",
+  locationLine2: "Disponible pour opportunités"
+};
+
 const PortfolioDataContext = createContext<PortfolioDataContextValue | undefined>(undefined);
 
 const createId = () => {
@@ -156,6 +325,13 @@ const cloneProjects = (projects: Project[]): Project[] =>
   }));
 
 const cloneSkills = (skills: Skill[]): Skill[] => skills.map((skill) => ({ ...skill }));
+
+const cloneCertifications = (items: Certification[]): Certification[] =>
+  items.map((c) => ({ ...c, highlights: [...c.highlights], skills: [...c.skills] }));
+const cloneTechTopics = (items: TechTopic[]): TechTopic[] => items.map((t) => ({ ...t, actions: [...t.actions] }));
+const cloneTechSources = (items: TechSource[]): TechSource[] => items.map((s) => ({ ...s, items: [...s.items] }));
+const cloneTechRoadmap = (items: TechRoadmapStep[]): TechRoadmapStep[] => items.map((s) => ({ ...s, goals: [...s.goals] }));
+const cloneContact = (c: ContactInfo): ContactInfo => ({ ...c });
 
 const isIconKey = (value: unknown): value is IconKey =>
   typeof value === "string" && value in iconLibrary;
@@ -226,13 +402,99 @@ const sanitizeStoredData = (data: unknown, fallback: StoredData): StoredData => 
   };
 };
 
+// V2: étend la structure pour toutes les sections administrables
+const sanitizeStoredDataV2 = (data: unknown, fallback: StoredData): StoredData => {
+  if (!data || typeof data !== "object") {
+    throw new Error("Format de données JSON invalide");
+  }
+
+  const partial = data as Partial<StoredData>;
+  const has = (k: keyof StoredData) => Object.prototype.hasOwnProperty.call(partial, k);
+
+  const projects = has("projects") && Array.isArray(partial.projects)
+    ? partial.projects.map((project) => sanitizeProject(project))
+    : fallback.projects;
+
+  const skills = has("skills") && Array.isArray(partial.skills)
+    ? partial.skills.map((skill) => sanitizeSkill(skill))
+    : fallback.skills;
+
+  const certifications = has("certifications") && Array.isArray((partial as any).certifications)
+    ? (partial as any).certifications.map((c: any) => ({
+        id: typeof c.id === "string" && c.id ? c.id : createId(),
+        title: String(c.title ?? ""),
+        organization: String(c.organization ?? c.organisation ?? ""),
+        date: String(c.date ?? ""),
+        summary: String(c.summary ?? ""),
+        highlights: Array.isArray(c.highlights) ? c.highlights.map((v: any) => String(v)) : [],
+        skills: Array.isArray(c.skills) ? c.skills.map((v: any) => String(v)) : []
+      }))
+    : (fallback as any).certifications ?? [];
+
+  const techTopics = has("techTopics") && Array.isArray((partial as any).techTopics)
+    ? (partial as any).techTopics.map((t: any) => ({
+        id: typeof t.id === "string" && t.id ? t.id : createId(),
+        title: String(t.title ?? ""),
+        description: String(t.description ?? ""),
+        actions: Array.isArray(t.actions) ? t.actions.map((v: any) => String(v)) : []
+      }))
+    : (fallback as any).techTopics ?? [];
+
+  const techSources = has("techSources") && Array.isArray((partial as any).techSources)
+    ? (partial as any).techSources.map((s: any) => ({
+        id: typeof s.id === "string" && s.id ? s.id : createId(),
+        label: String(s.label ?? ""),
+        items: Array.isArray(s.items) ? s.items.map((v: any) => String(v)) : []
+      }))
+    : (fallback as any).techSources ?? [];
+
+  const techRoadmap = has("techRoadmap") && Array.isArray((partial as any).techRoadmap)
+    ? (partial as any).techRoadmap.map((s: any) => ({
+        id: typeof s.id === "string" && s.id ? s.id : createId(),
+        period: String(s.period ?? ""),
+        goals: Array.isArray(s.goals) ? s.goals.map((v: any) => String(v)) : []
+      }))
+    : (fallback as any).techRoadmap ?? [];
+
+  const contact = has("contact") && (partial as any).contact
+    ? {
+        email: String((partial as any).contact.email ?? (fallback as any).contact?.email ?? ""),
+        linkedinUrl: String((partial as any).contact.linkedinUrl ?? (fallback as any).contact?.linkedinUrl ?? ""),
+        locationLine1: String((partial as any).contact.locationLine1 ?? (fallback as any).contact?.locationLine1 ?? ""),
+        locationLine2: (partial as any).contact.locationLine2
+          ? String((partial as any).contact.locationLine2)
+          : (fallback as any).contact?.locationLine2
+      }
+    : (fallback as any).contact ?? DEFAULT_CONTACT;
+
+  return {
+    projects,
+    skills,
+    certifications: certifications as any,
+    techTopics: techTopics as any,
+    techSources: techSources as any,
+    techRoadmap: techRoadmap as any,
+    contact: contact as any
+  } as StoredData;
+};
+
 export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => {
   const defaultDataRef = useRef<StoredData>({
     projects: cloneProjects(DEFAULT_PROJECTS),
-    skills: cloneSkills(DEFAULT_SKILLS)
+    skills: cloneSkills(DEFAULT_SKILLS),
+    certifications: cloneCertifications(DEFAULT_CERTIFICATIONS),
+    techTopics: cloneTechTopics(DEFAULT_TECH_TOPICS),
+    techSources: cloneTechSources(DEFAULT_TECH_SOURCES),
+    techRoadmap: cloneTechRoadmap(DEFAULT_TECH_ROADMAP),
+    contact: cloneContact(DEFAULT_CONTACT)
   });
   const [projects, setProjects] = useState<Project[]>(() => cloneProjects(DEFAULT_PROJECTS));
   const [skills, setSkills] = useState<Skill[]>(() => cloneSkills(DEFAULT_SKILLS));
+  const [certifications, setCertifications] = useState<Certification[]>(() => cloneCertifications(DEFAULT_CERTIFICATIONS));
+  const [techTopics, setTechTopics] = useState<TechTopic[]>(() => cloneTechTopics(DEFAULT_TECH_TOPICS));
+  const [techSources, setTechSources] = useState<TechSource[]>(() => cloneTechSources(DEFAULT_TECH_SOURCES));
+  const [techRoadmap, setTechRoadmap] = useState<TechRoadmapStep[]>(() => cloneTechRoadmap(DEFAULT_TECH_ROADMAP));
+  const [contact, setContact] = useState<ContactInfo>(() => cloneContact(DEFAULT_CONTACT));
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -251,15 +513,25 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
 
         if (stored) {
           const parsed = JSON.parse(stored);
-          const sanitized = sanitizeStoredData(parsed, defaultDataRef.current);
+          const sanitized = sanitizeStoredDataV2(parsed, defaultDataRef.current);
           const snapshot: StoredData = {
             projects: cloneProjects(sanitized.projects),
-            skills: cloneSkills(sanitized.skills)
+            skills: cloneSkills(sanitized.skills),
+            certifications: cloneCertifications((sanitized as any).certifications),
+            techTopics: cloneTechTopics((sanitized as any).techTopics),
+            techSources: cloneTechSources((sanitized as any).techSources),
+            techRoadmap: cloneTechRoadmap((sanitized as any).techRoadmap),
+            contact: cloneContact((sanitized as any).contact)
           };
 
           if (!isCancelled) {
             setProjects(snapshot.projects);
             setSkills(snapshot.skills);
+            setCertifications(snapshot.certifications);
+            setTechTopics(snapshot.techTopics);
+            setTechSources(snapshot.techSources);
+            setTechRoadmap(snapshot.techRoadmap);
+            setContact(snapshot.contact);
           }
 
           hasLoaded = true;
@@ -274,16 +546,26 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
 
           if (response.ok) {
             const parsed = await response.json();
-            const sanitized = sanitizeStoredData(parsed, defaultDataRef.current);
+            const sanitized = sanitizeStoredDataV2(parsed, defaultDataRef.current);
             const snapshot: StoredData = {
               projects: cloneProjects(sanitized.projects),
-              skills: cloneSkills(sanitized.skills)
+              skills: cloneSkills(sanitized.skills),
+              certifications: cloneCertifications((sanitized as any).certifications),
+              techTopics: cloneTechTopics((sanitized as any).techTopics),
+              techSources: cloneTechSources((sanitized as any).techSources),
+              techRoadmap: cloneTechRoadmap((sanitized as any).techRoadmap),
+              contact: cloneContact((sanitized as any).contact)
             };
 
             if (!isCancelled) {
               defaultDataRef.current = snapshot;
               setProjects(snapshot.projects);
               setSkills(snapshot.skills);
+              setCertifications(snapshot.certifications);
+              setTechTopics(snapshot.techTopics);
+              setTechSources(snapshot.techSources);
+              setTechRoadmap(snapshot.techRoadmap);
+              setContact(snapshot.contact);
             }
 
             hasLoaded = true;
@@ -310,10 +592,15 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
       return;
     }
 
-    const dataToStore = {
+    const dataToStore: StoredData = {
       projects: projects.map((project) => sanitizeProject(project)),
-      skills: skills.map((skill) => sanitizeSkill(skill))
-    } satisfies StoredData;
+      skills: skills.map((skill) => sanitizeSkill(skill)),
+      certifications: cloneCertifications(certifications),
+      techTopics: cloneTechTopics(techTopics),
+      techSources: cloneTechSources(techSources),
+      techRoadmap: cloneTechRoadmap(techRoadmap),
+      contact: cloneContact(contact)
+    };
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToStore));
   }, [projects, skills, isLoaded]);
@@ -346,6 +633,64 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
     setSkills((prev) => prev.filter((skill) => skill.id !== skillId));
   };
 
+  // Certifications CRUD
+  const addCertification = (cert: CertificationInput) => {
+    setCertifications((prev) => [
+      ...prev,
+      { ...cert, id: createId(), highlights: cert.highlights.map(String), skills: cert.skills.map(String) }
+    ]);
+  };
+
+  const updateCertification = (certId: string, cert: CertificationInput) => {
+    setCertifications((prev) =>
+      prev.map((c) => (c.id === certId ? { ...cert, id: certId, highlights: cert.highlights.map(String), skills: cert.skills.map(String) } : c))
+    );
+  };
+
+  const deleteCertification = (certId: string) => {
+    setCertifications((prev) => prev.filter((c) => c.id !== certId));
+  };
+
+  // Tech watch CRUD
+  const addTechTopic = (topic: TechTopicInput) => {
+    setTechTopics((prev) => [...prev, { ...topic, id: createId(), actions: topic.actions.map(String) }]);
+  };
+  const updateTechTopic = (topicId: string, topic: TechTopicInput) => {
+    setTechTopics((prev) => prev.map((t) => (t.id === topicId ? { ...topic, id: topicId, actions: topic.actions.map(String) } : t)));
+  };
+  const deleteTechTopic = (topicId: string) => {
+    setTechTopics((prev) => prev.filter((t) => t.id !== topicId));
+  };
+
+  const addTechSource = (source: TechSourceInput) => {
+    setTechSources((prev) => [...prev, { ...source, id: createId(), items: source.items.map(String) }]);
+  };
+  const updateTechSource = (sourceId: string, source: TechSourceInput) => {
+    setTechSources((prev) => prev.map((s) => (s.id === sourceId ? { ...source, id: sourceId, items: source.items.map(String) } : s)));
+  };
+  const deleteTechSource = (sourceId: string) => {
+    setTechSources((prev) => prev.filter((s) => s.id !== sourceId));
+  };
+
+  const addTechRoadmapStep = (step: TechRoadmapStepInput) => {
+    setTechRoadmap((prev) => [...prev, { ...step, id: createId(), goals: step.goals.map(String) }]);
+  };
+  const updateTechRoadmapStep = (stepId: string, step: TechRoadmapStepInput) => {
+    setTechRoadmap((prev) => prev.map((s) => (s.id === stepId ? { ...step, id: stepId, goals: step.goals.map(String) } : s)));
+  };
+  const deleteTechRoadmapStep = (stepId: string) => {
+    setTechRoadmap((prev) => prev.filter((s) => s.id !== stepId));
+  };
+
+  const updateContact = (value: ContactInfo) => {
+    setContact({
+      email: String(value.email || ""),
+      linkedinUrl: String(value.linkedinUrl || ""),
+      locationLine1: String(value.locationLine1 || ""),
+      locationLine2: value.locationLine2 ? String(value.locationLine2) : undefined
+    });
+  };
+
   const resetData = () => {
     if (typeof window !== "undefined") {
       window.localStorage.removeItem(STORAGE_KEY);
@@ -355,33 +700,66 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
 
     setProjects(cloneProjects(snapshot.projects));
     setSkills(cloneSkills(snapshot.skills));
+    setCertifications(cloneCertifications(snapshot.certifications));
+    setTechTopics(cloneTechTopics(snapshot.techTopics));
+    setTechSources(cloneTechSources(snapshot.techSources));
+    setTechRoadmap(cloneTechRoadmap(snapshot.techRoadmap));
+    setContact(cloneContact(snapshot.contact));
   };
 
   const exportData = (): StoredData => ({
     projects: projects.map((project) => sanitizeProject(project)),
-    skills: skills.map((skill) => sanitizeSkill(skill))
+    skills: skills.map((skill) => sanitizeSkill(skill)),
+    certifications: cloneCertifications(certifications),
+    techTopics: cloneTechTopics(techTopics),
+    techSources: cloneTechSources(techSources),
+    techRoadmap: cloneTechRoadmap(techRoadmap),
+    contact: cloneContact(contact)
   });
 
   const importData = (data: unknown) => {
-    const sanitized = sanitizeStoredData(data, { projects, skills });
+    const sanitized = sanitizeStoredDataV2(data, defaultDataRef.current);
 
     setProjects(cloneProjects(sanitized.projects));
     setSkills(cloneSkills(sanitized.skills));
+    setCertifications(cloneCertifications((sanitized as any).certifications));
+    setTechTopics(cloneTechTopics((sanitized as any).techTopics));
+    setTechSources(cloneTechSources((sanitized as any).techSources));
+    setTechRoadmap(cloneTechRoadmap((sanitized as any).techRoadmap));
+    setContact(cloneContact((sanitized as any).contact));
   };
 
   const value = useMemo<PortfolioDataContextValue>(() => ({
     projects,
     skills,
+    certifications,
+    techTopics,
+    techSources,
+    techRoadmap,
+    contact,
     addProject,
     updateProject,
     deleteProject,
     addSkill,
     updateSkill,
     deleteSkill,
+    addCertification: (cert) => addCertification(cert),
+    updateCertification: (id, cert) => updateCertification(id, cert),
+    deleteCertification: (id) => deleteCertification(id),
+    addTechTopic: (t) => addTechTopic(t),
+    updateTechTopic: (id, t) => updateTechTopic(id, t),
+    deleteTechTopic: (id) => deleteTechTopic(id),
+    addTechSource: (s) => addTechSource(s),
+    updateTechSource: (id, s) => updateTechSource(id, s),
+    deleteTechSource: (id) => deleteTechSource(id),
+    addTechRoadmapStep: (s) => addTechRoadmapStep(s),
+    updateTechRoadmapStep: (id, s) => updateTechRoadmapStep(id, s),
+    deleteTechRoadmapStep: (id) => deleteTechRoadmapStep(id),
+    updateContact: (c) => updateContact(c),
     resetData,
     exportData,
     importData
-  }), [projects, skills]);
+  }), [projects, skills, certifications, techTopics, techSources, techRoadmap, contact]);
 
   return <PortfolioDataContext.Provider value={value}>{children}</PortfolioDataContext.Provider>;
 };

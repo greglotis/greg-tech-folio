@@ -5,11 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Linkedin, MapPin, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { usePortfolioData } from "@/lib/portfolio-data";
 
 const Contact = () => {
   const { toast } = useToast();
-  const { contact } = usePortfolioData();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -60,10 +58,10 @@ const Contact = () => {
               </CardHeader>
               <CardContent>
                 <a 
-                  href={`mailto:${contact.email}`} 
+                  href="mailto:greg.lmtki@gmail.com" 
                   className="text-muted-foreground hover:text-accent transition-smooth"
                 >
-                  {contact.email}
+                  contact@greg-portfolio.fr
                 </a>
               </CardContent>
             </Card>
@@ -77,7 +75,7 @@ const Contact = () => {
               </CardHeader>
               <CardContent>
                 <a 
-                  href={contact.linkedinUrl} 
+                  href="https://www.linkedin.com/in/greg-lamataki-5794b22b7/" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-accent transition-smooth"

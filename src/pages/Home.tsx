@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Linkedin, Download, ArrowRight, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
-import profilePhoto from "@/assets/profile-photo.jpg";
+import profilePhoto from "@/assets/imageGreg.png";
 import { usePortfolioData } from "@/lib/portfolio-data";
 
 const Home = () => {
@@ -27,8 +27,9 @@ const Home = () => {
               </h1>
               
               <p className="text-lg text-muted-foreground leading-relaxed">
+                Etudiant en 2ème année de BTS SIO, option SISR, en alternance au sein de la DSI de la Mairie de NOUMEA.
                 Passionné par l'infrastructure réseau, la virtualisation et l'administration système. 
-                Je conçois et maintiens des solutions techniques robustes pour optimiser les systèmes d'information.
+                
               </p>
               
               <div className="flex flex-wrap gap-4 pt-4">
@@ -47,11 +48,11 @@ const Home = () => {
                 </Button>
 
                 <Button asChild variant="ghost" size="lg">
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.linkedin.com/in/greg-lamataki-5794b22b7/" target="_blank" rel="noopener noreferrer">
                     <Linkedin className="mr-2" size={18} />
                     LinkedIn
                   </a>
-                </Button>
+                </Button>""
 
               </div>
             </div>

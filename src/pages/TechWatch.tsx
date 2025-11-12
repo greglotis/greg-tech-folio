@@ -1,4 +1,7 @@
+import { usePortfolioData } from "@/lib/portfolio-data";
+
 const TechWatch = () => {
+  const { techTopics, techSources, techRoadmap } = usePortfolioData();
   const focusTopics = [
     {
       title: "Infrastructure & Cloud",
@@ -80,6 +83,10 @@ const TechWatch = () => {
     },
   ];
 
+  const topics = techTopics && techTopics.length > 0 ? techTopics : focusTopics;
+  const srcs = techSources && techSources.length > 0 ? techSources : sources;
+  const rm = techRoadmap && techRoadmap.length > 0 ? techRoadmap : roadmap;
+
   return (
     <div className="pt-28 pb-20 px-4">
       <div className="container mx-auto max-w-5xl space-y-16">
@@ -98,7 +105,7 @@ const TechWatch = () => {
         <section>
           <h2 className="text-2xl font-semibold mb-6 text-center">Axes de veille prioritaires</h2>
           <div className="grid gap-8 md:grid-cols-3">
-            {focusTopics.map((topic) => (
+            {topics.map((topic) => (
               <article
                 key={topic.title}
                 className="p-6 rounded-xl bg-card shadow-soft hover:shadow-medium transition-smooth space-y-4"
@@ -123,7 +130,7 @@ const TechWatch = () => {
         <section>
           <h2 className="text-2xl font-semibold mb-6 text-center">Sources suivies</h2>
           <div className="grid gap-6 md:grid-cols-3">
-            {sources.map((source) => (
+            {srcs.map((source) => (
               <article
                 key={source.label}
                 className="p-6 rounded-xl bg-muted/40 border border-border/60 h-full"
@@ -145,7 +152,7 @@ const TechWatch = () => {
         <section>
           <h2 className="text-2xl font-semibold mb-6 text-center">Feuille de route 2024</h2>
           <div className="space-y-6">
-            {roadmap.map((step) => (
+            {rm.map((step) => (
               <article
                 key={step.period}
                 className="p-6 rounded-xl border border-border/60 bg-background/60"

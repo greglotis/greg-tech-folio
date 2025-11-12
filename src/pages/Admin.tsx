@@ -14,6 +14,11 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
   usePortfolioData,
+  type CertificationInput,
+  type TechTopicInput,
+  type TechSourceInput,
+  type TechRoadmapStepInput,
+  type ContactInfo,
   type ProjectInput,
   type SkillInput,
   type PortfolioDataSnapshot
@@ -162,6 +167,373 @@ const ProjectForm = ({ initialData, submitLabel, onSubmit, onCancel }: ProjectFo
   );
 };
 
+// Certification form
+interface CertificationFormProps {
+  initialData?: CertificationInput;
+  submitLabel: string;
+  onSubmit: (data: CertificationInput) => void;
+  onCancel?: () => void;
+}
+
+const CertificationForm = ({ initialData, submitLabel, onSubmit, onCancel }: CertificationFormProps) => {
+  const isEditMode = Boolean(initialData);
+  const [title, setTitle] = useState(initialData?.title ?? "");
+  const [organization, setOrganization] = useState(initialData?.organization ?? "");
+  const [date, setDate] = useState(initialData?.date ?? "");
+  const [summary, setSummary] = useState(initialData?.summary ?? "");
+  const [highlights, setHighlights] = useState((initialData?.highlights ?? []).join("\n"));
+  const [skills, setSkills] = useState((initialData?.skills ?? []).join(", "));
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit({
+      title: title.trim(),
+      organization: organization.trim(),
+      date: date.trim(),
+      summary: summary.trim(),
+      highlights: parseList(highlights),
+      skills: parseList(skills)
+    });
+
+    if (!isEditMode) {
+      setTitle("");
+      setOrganization("");
+      setDate("");
+      setSummary("");
+      setHighlights("");
+      setSkills("");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-2">
+          <Label>Titre</Label>
+          <Input value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="Intitulé" />
+        </div>
+        <div className="grid gap-2">
+          <Label>Organisme</Label>
+          <Input value={organization} onChange={(e) => setOrganization(e.target.value)} required placeholder="Ex: Cisco" />
+        </div>
+        <section className="space-y-8">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-semibold">Gestion des certifications</h2>
+            <p className="text-muted-foreground">Ajoutez, modifiez ou supprimez vos certifications.</p>
+          </div>
+
+          <Card className="shadow-soft">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Plus size={18} /> Ajouter une certification
+              </CardTitle>
+              <CardDescription>Renseignez les informations ci-dessous.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CertificationForm submitLabel="Ajouter" onSubmit={(data)=>{ addCertification(data); toast({ title: "Certification ajoutée" }); }} />
+            </CardContent>
+          </Card>
+
+          <div className="space-y-4">
+            {certifications.length === 0 ? (
+              <Card className="shadow-soft"><CardContent className="py-8 text-center text-muted-foreground">Aucune certification enregistrée.</CardContent></Card>
+            ) : (
+              certifications.map((cert)=> (
+                <Card key={cert.id} className="shadow-soft">
+                  <CardHeader>
+                    <div className="space-y-1">
+                      <CardTitle className="text-xl">{cert.title}</CardTitle>
+                      <CardDescription>{cert.organization} • {cert.date}</CardDescription>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {editingCertId === cert.id ? (
+                      <CertificationForm
+                        initialData={cert}
+                        submitLabel="Enregistrer"
+                        onSubmit={(data)=>{ updateCertification(cert.id, data); setEditingCertId(null); toast({ title: "Certification mise à jour" }); }}
+                        onCancel={()=>setEditingCertId(null)}
+                      />
+                    ) : (
+                      <div className="space-y-3 text-sm text-muted-foreground">
+                        <p>{cert.summary}</p>
+                        {cert.highlights.length > 0 && (
+                          <ul className="list-disc list-inside space-y-1">
+                            {cert.highlights.map((h, i)=>(<li key={`${cert.id}-h-${i}`}>{h}</li>))}
+                          </ul>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                  {editingCertId !== cert.id && (
+                    <CardFooter className="flex justify-end gap-2">
+                      <Button variant="outline" size="sm" onClick={()=>setEditingCertId(cert.id)}><Pencil className="mr-2" size={16}/>Modifier</Button>
+                      <Button variant="destructive" size="sm" onClick={()=>{ if (confirmAction("Supprimer cette certification ?")) { deleteCertification(cert.id); toast({ title: "Certification supprimée" }); } }}><Trash2 className="mr-2" size={16}/>Supprimer</Button>
+                    </CardFooter>
+                  )}
+                </Card>
+              ))
+            )}
+          </div>
+        </section>
+
+        <section className="space-y-8">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-semibold">Veille technologique</h2>
+            <p className="text-muted-foreground">Gérez les axes, sources et la feuille de route.</p>
+          </div>
+
+          <Card className="shadow-soft">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2"><Plus size={18}/> Ajouter un axe de veille</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <TopicForm submitLabel="Ajouter" onSubmit={(d)=>{ addTechTopic(d); toast({ title: "Axe ajouté" }); }} />
+            </CardContent>
+          </Card>
+
+          <div className="space-y-4">
+            {techTopics.map((t)=> (
+              <Card key={t.id} className="shadow-soft">
+                <CardHeader>
+                  <CardTitle className="text-xl">{t.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {editingTopicId === t.id ? (
+                    <TopicForm initial={t} submitLabel="Enregistrer" onSubmit={(d)=>{ updateTechTopic(t.id, d); setEditingTopicId(null); toast({ title: "Axe mis à jour" }); }} onCancel={()=>setEditingTopicId(null)} />
+                  ) : (
+                    <p className="text-sm text-muted-foreground">{t.description}</p>
+                  )}
+                </CardContent>
+                {editingTopicId !== t.id && (
+                  <CardFooter className="flex justify-end gap-2">
+                    <Button variant="outline" size="sm" onClick={()=>setEditingTopicId(t.id)}><Pencil className="mr-2" size={16}/>Modifier</Button>
+                    <Button variant="destructive" size="sm" onClick={()=>{ if (confirmAction("Supprimer cet axe ?")) { deleteTechTopic(t.id); toast({ title: "Axe supprimé" }); } }}><Trash2 className="mr-2" size={16}/>Supprimer</Button>
+                  </CardFooter>
+                )}
+              </Card>
+            ))}
+          </div>
+
+          <Card className="shadow-soft">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2"><Plus size={18}/> Ajouter une source</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <SourceForm submitLabel="Ajouter" onSubmit={(d)=>{ addTechSource(d); toast({ title: "Source ajoutée" }); }} />
+            </CardContent>
+          </Card>
+
+          <div className="space-y-4">
+            {techSources.map((s)=> (
+              <Card key={s.id} className="shadow-soft">
+                <CardHeader>
+                  <CardTitle className="text-xl">{s.label}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {editingSourceId === s.id ? (
+                    <SourceForm initial={s} submitLabel="Enregistrer" onSubmit={(d)=>{ updateTechSource(s.id, d); setEditingSourceId(null); toast({ title: "Source mise à jour" }); }} onCancel={()=>setEditingSourceId(null)} />
+                  ) : (
+                    <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+                      {s.items.map((it, i)=>(<li key={`${s.id}-it-${i}`}>{it}</li>))}
+                    </ul>
+                  )}
+                </CardContent>
+                {editingSourceId !== s.id && (
+                  <CardFooter className="flex justify-end gap-2">
+                    <Button variant="outline" size="sm" onClick={()=>setEditingSourceId(s.id)}><Pencil className="mr-2" size={16}/>Modifier</Button>
+                    <Button variant="destructive" size="sm" onClick={()=>{ if (confirmAction("Supprimer cette source ?")) { deleteTechSource(s.id); toast({ title: "Source supprimée" }); } }}><Trash2 className="mr-2" size={16}/>Supprimer</Button>
+                  </CardFooter>
+                )}
+              </Card>
+            ))}
+          </div>
+
+          <Card className="shadow-soft">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2"><Plus size={18}/> Ajouter une étape de roadmap</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RoadmapForm submitLabel="Ajouter" onSubmit={(d)=>{ addTechRoadmapStep(d); toast({ title: "Étape ajoutée" }); }} />
+            </CardContent>
+          </Card>
+
+          <div className="space-y-4">
+            {techRoadmap.map((s)=> (
+              <Card key={s.id} className="shadow-soft">
+                <CardHeader>
+                  <CardTitle className="text-xl">{s.period}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {editingRoadmapId === s.id ? (
+                    <RoadmapForm initial={s} submitLabel="Enregistrer" onSubmit={(d)=>{ updateTechRoadmapStep(s.id, d); setEditingRoadmapId(null); toast({ title: "Étape mise à jour" }); }} onCancel={()=>setEditingRoadmapId(null)} />
+                  ) : (
+                    <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+                      {s.goals.map((g, i)=>(<li key={`${s.id}-goal-${i}`}>{g}</li>))}
+                    </ul>
+                  )}
+                </CardContent>
+                {editingRoadmapId !== s.id && (
+                  <CardFooter className="flex justify-end gap-2">
+                    <Button variant="outline" size="sm" onClick={()=>setEditingRoadmapId(s.id)}><Pencil className="mr-2" size={16}/>Modifier</Button>
+                    <Button variant="destructive" size="sm" onClick={()=>{ if (confirmAction("Supprimer cette étape ?")) { deleteTechRoadmapStep(s.id); toast({ title: "Étape supprimée" }); } }}><Trash2 className="mr-2" size={16}/>Supprimer</Button>
+                  </CardFooter>
+                )}
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-8">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-semibold">Informations de contact</h2>
+            <p className="text-muted-foreground">Modifiez l'email, le LinkedIn et la localisation affichés dans la page Contact.</p>
+          </div>
+          <Card className="shadow-soft">
+            <CardHeader>
+              <CardTitle>Contact</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ContactForm initial={contact} onSubmit={(c)=>{ updateContact(c); toast({ title: "Contact mis à jour" }); }} />
+            </CardContent>
+          </Card>
+        </section>
+
+      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-2">
+          <Label>Date</Label>
+          <Input value={date} onChange={(e) => setDate(e.target.value)} placeholder="2023" />
+        </div>
+        <div className="grid gap-2">
+          <Label>Compétences (séparées par virgule)</Label>
+          <Input value={skills} onChange={(e) => setSkills(e.target.value)} placeholder="Routage, Switching" />
+        </div>
+      </div>
+      <div className="grid gap-2">
+        <Label>Résumé</Label>
+        <Textarea value={summary} onChange={(e) => setSummary(e.target.value)} rows={3} />
+      </div>
+      <div className="grid gap-2">
+        <Label>Points forts (un par ligne)</Label>
+        <Textarea value={highlights} onChange={(e) => setHighlights(e.target.value)} rows={4} />
+      </div>
+      <div className="flex justify-end gap-2">
+        {onCancel && (
+          <Button type="button" variant="outline" onClick={onCancel}>
+            <X className="mr-2" size={16} /> Annuler
+          </Button>
+        )}
+        <Button type="submit">
+          <Save className="mr-2" size={16} /> {submitLabel}
+        </Button>
+      </div>
+    </form>
+  );
+};
+
+// Simple forms for Tech Watch
+const TopicForm = ({ initial, onSubmit, onCancel, submitLabel = "Enregistrer" }: {
+  initial?: TechTopicInput; submitLabel?: string; onSubmit: (d: TechTopicInput) => void; onCancel?: () => void;
+}) => {
+  const isEdit = Boolean(initial);
+  const [title, setTitle] = useState(initial?.title ?? "");
+  const [description, setDescription] = useState(initial?.description ?? "");
+  const [actions, setActions] = useState((initial?.actions ?? []).join("\n"));
+  const handle = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit({ title: title.trim(), description: description.trim(), actions: parseList(actions) });
+    if (!isEdit) { setTitle(""); setDescription(""); setActions(""); }
+  };
+  return (
+    <form onSubmit={handle} className="space-y-3">
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-2"><Label>Titre</Label><Input value={title} onChange={(e)=>setTitle(e.target.value)} required /></div>
+        <div className="grid gap-2"><Label>Actions (1/ligne)</Label><Textarea rows={3} value={actions} onChange={(e)=>setActions(e.target.value)} /></div>
+      </div>
+      <div className="grid gap-2"><Label>Description</Label><Textarea rows={3} value={description} onChange={(e)=>setDescription(e.target.value)} /></div>
+      <div className="flex justify-end gap-2">
+        {onCancel && <Button type="button" variant="outline" onClick={onCancel}><X className="mr-2" size={16}/>Annuler</Button>}
+        <Button type="submit"><Save className="mr-2" size={16}/> {submitLabel}</Button>
+      </div>
+    </form>
+  );
+};
+
+const SourceForm = ({ initial, onSubmit, onCancel, submitLabel = "Enregistrer" }: {
+  initial?: TechSourceInput; submitLabel?: string; onSubmit: (d: TechSourceInput) => void; onCancel?: () => void;
+}) => {
+  const isEdit = Boolean(initial);
+  const [label, setLabel] = useState(initial?.label ?? "");
+  const [items, setItems] = useState((initial?.items ?? []).join("\n"));
+  const handle = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit({ label: label.trim(), items: parseList(items) });
+    if (!isEdit) { setLabel(""); setItems(""); }
+  };
+  return (
+    <form onSubmit={handle} className="space-y-3">
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-2"><Label>Libellé</Label><Input value={label} onChange={(e)=>setLabel(e.target.value)} required /></div>
+        <div className="grid gap-2"><Label>Éléments (1/ligne)</Label><Textarea rows={4} value={items} onChange={(e)=>setItems(e.target.value)} /></div>
+      </div>
+      <div className="flex justify-end gap-2">
+        {onCancel && <Button type="button" variant="outline" onClick={onCancel}><X className="mr-2" size={16}/>Annuler</Button>}
+        <Button type="submit"><Save className="mr-2" size={16}/> {submitLabel}</Button>
+      </div>
+    </form>
+  );
+};
+
+const RoadmapForm = ({ initial, onSubmit, onCancel, submitLabel = "Enregistrer" }: {
+  initial?: TechRoadmapStepInput; submitLabel?: string; onSubmit: (d: TechRoadmapStepInput) => void; onCancel?: () => void;
+}) => {
+  const isEdit = Boolean(initial);
+  const [period, setPeriod] = useState(initial?.period ?? "");
+  const [goals, setGoals] = useState((initial?.goals ?? []).join("\n"));
+  const handle = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); onSubmit({ period: period.trim(), goals: parseList(goals) }); if (!isEdit) { setPeriod(""); setGoals(""); } };
+  return (
+    <form onSubmit={handle} className="space-y-3">
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-2"><Label>Période</Label><Input value={period} onChange={(e)=>setPeriod(e.target.value)} required /></div>
+        <div className="grid gap-2"><Label>Objectifs (1/ligne)</Label><Textarea rows={4} value={goals} onChange={(e)=>setGoals(e.target.value)} /></div>
+      </div>
+      <div className="flex justify-end gap-2">
+        {onCancel && <Button type="button" variant="outline" onClick={onCancel}><X className="mr-2" size={16}/>Annuler</Button>}
+        <Button type="submit"><Save className="mr-2" size={16}/> {submitLabel}</Button>
+      </div>
+    </form>
+  );
+};
+
+const ContactForm = ({ initial, onSubmit }: { initial: ContactInfo; onSubmit: (c: ContactInfo) => void }) => {
+  const [email, setEmail] = useState(initial.email);
+  const [linkedinUrl, setLinkedinUrl] = useState(initial.linkedinUrl);
+  const [locationLine1, setLocationLine1] = useState(initial.locationLine1);
+  const [locationLine2, setLocationLine2] = useState(initial.locationLine2 ?? "");
+
+  const handle = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit({ email, linkedinUrl, locationLine1, locationLine2 });
+  };
+
+  return (
+    <form onSubmit={handle} className="space-y-4">
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-2"><Label>Email</Label><Input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} required /></div>
+        <div className="grid gap-2"><Label>LinkedIn</Label><Input value={linkedinUrl} onChange={(e)=>setLinkedinUrl(e.target.value)} required /></div>
+      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-2"><Label>Localisation ligne 1</Label><Input value={locationLine1} onChange={(e)=>setLocationLine1(e.target.value)} required /></div>
+        <div className="grid gap-2"><Label>Localisation ligne 2</Label><Input value={locationLine2} onChange={(e)=>setLocationLine2(e.target.value)} /></div>
+      </div>
+      <div className="flex justify-end">
+        <Button type="submit"><Save className="mr-2" size={16}/> Enregistrer</Button>
+      </div>
+    </form>
+  );
+};
+
 interface SkillFormProps {
   initialData?: SkillInput;
   submitLabel: string;
@@ -266,6 +638,24 @@ const Admin = () => {
     addSkill,
     updateSkill,
     deleteSkill,
+    certifications,
+    addCertification,
+    updateCertification,
+    deleteCertification,
+    techTopics,
+    techSources,
+    techRoadmap,
+    addTechTopic,
+    updateTechTopic,
+    deleteTechTopic,
+    addTechSource,
+    updateTechSource,
+    deleteTechSource,
+    addTechRoadmapStep,
+    updateTechRoadmapStep,
+    deleteTechRoadmapStep,
+    contact,
+    updateContact,
     resetData,
     exportData,
     importData
@@ -273,6 +663,10 @@ const Admin = () => {
   const { toast } = useToast();
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
   const [editingSkillId, setEditingSkillId] = useState<string | null>(null);
+  const [editingCertId, setEditingCertId] = useState<string | null>(null);
+  const [editingTopicId, setEditingTopicId] = useState<string | null>(null);
+  const [editingSourceId, setEditingSourceId] = useState<string | null>(null);
+  const [editingRoadmapId, setEditingRoadmapId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const categorySuggestions = useMemo(

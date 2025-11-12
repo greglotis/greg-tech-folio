@@ -1,7 +1,9 @@
 import { Badge } from "@/components/ui/badge";
+import { usePortfolioData } from "@/lib/portfolio-data";
 
 const Certifications = () => {
-  const certifications = [
+  const { certifications } = usePortfolioData();
+  const staticCerts = [
     {
       title: "CCNA: Switching, Routing & Wireless Essentials",
       organization: "Cisco Networking Academy",
@@ -43,6 +45,8 @@ const Certifications = () => {
     },
   ];
 
+  const list = certifications && certifications.length > 0 ? certifications : staticCerts;
+
   return (
     <div className="pt-28 pb-20 px-4">
       <div className="container mx-auto max-w-5xl space-y-16">
@@ -60,9 +64,9 @@ const Certifications = () => {
         </header>
 
         <section className="space-y-10">
-          {certifications.map((certification, index) => (
+          {list.map((certification, index) => (
             <article
-              key={certification.title}
+              key={(certification as any).id ?? certification.title}
               className="rounded-2xl border border-border/60 bg-card/80 shadow-soft hover:shadow-medium transition-smooth p-8 space-y-6 animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
@@ -89,7 +93,7 @@ const Certifications = () => {
 
               <div className="flex flex-wrap gap-2">
                 {certification.skills.map((skill) => (
-                  <Badge key={skill} variant="secondary" className="uppercase tracking-wide">
+                  <Badge key={`${(certification as any).id ?? certification.title}-${skill}`} variant="secondary" className="uppercase tracking-wide">
                     {skill}
                   </Badge>
                 ))}
