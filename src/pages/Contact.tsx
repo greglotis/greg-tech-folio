@@ -75,7 +75,7 @@ const Contact = () => {
               </CardHeader>
               <CardContent>
                 <a 
-                  href="https://linkedin.com" 
+                  href="https://www.linkedin.com/in/greg-lamataki-5794b22b7/" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-accent transition-smooth"
