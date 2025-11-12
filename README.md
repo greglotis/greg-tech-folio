@@ -260,9 +260,9 @@ Modifier les fichiers dans `src/pages/` pour personnaliser :
 - **Contact.tsx** : Formulaire de contact
 
 ### Administration du contenu
-- Rendez-vous sur `/admin` (via le lien présent dans la navigation) pour ajouter, modifier ou supprimer des projets et compétences.
+- Rendez-vous sur `/admin` (via le lien présent dans la navigation) pour modifier l'ensemble du portfolio : hero d'accueil, statistiques, texte « À propos », projets, compétences, expériences, qualités, certifications et veille technologique.
 - Les modifications sont stockées dans votre navigateur (localStorage). Utilisez le bouton de réinitialisation pour revenir aux données par défaut.
-- Exportez vos contenus en JSON depuis l'onglet Admin pour conserver une sauvegarde et réimportez-la sur un autre poste si besoin.
+- Exportez vos contenus en JSON depuis l'onglet Admin pour conserver une sauvegarde complète et réimportez-la sur un autre poste si besoin.
 
 #### Importer vos données exportées en production
 1. Déployez la dernière version du site (build Vite ou image Docker) sur votre serveur.

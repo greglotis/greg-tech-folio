@@ -10,7 +10,8 @@ const Navigation = () => {
     { path: "/competences", label: "Compétences", icon: Award },
     { path: "/certifications", label: "Certifications", icon: BadgeCheck },
     { path: "/veille-technologique", label: "Veille technologique", icon: Radar },
-    { path: "/contact", label: "Contact", icon: Mail }
+    { path: "/contact", label: "Contact", icon: Mail },
+    { path: "/admin", label: "Admin", icon: Settings },
   ];
 
   return (

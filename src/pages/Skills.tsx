@@ -3,7 +3,7 @@ import { usePortfolioData } from "@/lib/portfolio-data";
 import { getIconComponent } from "@/lib/icons";
 
 const Skills = () => {
-  const { skills } = usePortfolioData();
+  const { skills, softSkills } = usePortfolioData();
 
   const categories = Array.from(new Set(skills.map((skill) => skill.category))).sort((a, b) =>
     a.localeCompare(b, "fr", { sensitivity: "base" })
@@ -71,31 +71,23 @@ const Skills = () => {
         {/* Soft skills section */}
         <div className="mt-16 p-8 bg-muted/30 rounded-lg">
           <h2 className="text-2xl font-semibold mb-6 text-center">Qualités professionnelles</h2>
-          <div className="grid md:grid-cols-3 gap-6 text-center">
-            <div className="space-y-2">
-              <div className="text-3xl">🎯</div>
-              <h3 className="font-medium">Rigueur</h3>
-              <p className="text-sm text-muted-foreground">
-                Méthodologie structurée et documentation précise
-              </p>
+          {softSkills.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center">
+              Aucune qualité ajoutée pour le moment. Personnalisez cette section depuis l&apos;interface administrateur.
+            </p>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              {softSkills.map((softSkill) => (
+                <div key={softSkill.id} className="space-y-2">
+                  <div className="text-3xl" aria-hidden>
+                    {softSkill.icon}
+                  </div>
+                  <h3 className="font-medium">{softSkill.title}</h3>
+                  <p className="text-sm text-muted-foreground">{softSkill.description}</p>
+                </div>
+              ))}
             </div>
-            
-            <div className="space-y-2">
-              <div className="text-3xl">🔍</div>
-              <h3 className="font-medium">Analyse</h3>
-              <p className="text-sm text-muted-foreground">
-                Diagnostic rapide et résolution efficace des problèmes
-              </p>
-            </div>
-            
-            <div className="space-y-2">
-              <div className="text-3xl">🤝</div>
-              <h3 className="font-medium">Collaboration</h3>
-              <p className="text-sm text-muted-foreground">
-                Esprit d'équipe et communication claire
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

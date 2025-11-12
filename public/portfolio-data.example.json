@@ -77,5 +77,181 @@
     { "id": "pfsense", "name": "pfSense", "category": "Sécurité", "icon": "shield" },
     { "id": "backup-pra", "name": "Backup & PRA", "category": "Sécurité", "icon": "hardDrive" },
     { "id": "monitoring-nagios", "name": "Monitoring (Nagios)", "category": "Sécurité", "icon": "activity" }
-  ]
+  ],
+  "content": {
+    "hero": {
+      "badge": "Technicien SISR",
+      "greeting": "Bonjour, je suis",
+      "highlight": "Greg",
+      "description": "Passionné par l'infrastructure réseau, la virtualisation et l'administration système. Je conçois et maintiens des solutions techniques robustes pour optimiser les systèmes d'information.",
+      "primaryCtaLabel": "Voir mes projets",
+      "primaryCtaHref": "/projets",
+      "secondaryCtaLabel": "Télécharger CV",
+      "secondaryCtaHref": "/cv-greg.pdf",
+      "secondaryCtaDownload": true,
+      "tertiaryCtaLabel": "LinkedIn",
+      "tertiaryCtaHref": "https://linkedin.com",
+      "tertiaryCtaExternal": true
+    },
+    "highlights": [
+      { "id": "projects-count", "label": "Projets réalisés", "valueType": "projects", "customValue": "" },
+      { "id": "skills-count", "label": "Technologies maîtrisées", "valueType": "skills", "customValue": "" },
+      { "id": "commitment", "label": "Engagement professionnel", "valueType": "custom", "customValue": "100%" }
+    ],
+    "about": [
+      "Fort d'une formation BTS SISR, je me spécialise dans la conception, le déploiement et la maintenance d'infrastructures IT complexes. Mon expertise couvre la virtualisation (Proxmox), l'administration réseau (VLANs, Cisco), et les services d'entreprise (Active Directory, 3CX).",
+      "Rigoureux et méthodique, j'applique les meilleures pratiques pour garantir la sécurité, la performance et la disponibilité des systèmes dont j'ai la charge. Mon approche orientée solution me permet de répondre efficacement aux besoins techniques des organisations."
+    ],
+    "experiences": [
+      {
+        "id": "experience-sf2i",
+        "title": "Stage - SF2i",
+        "organization": "SF2i",
+        "period": "2023",
+        "description": "Immersion au sein de l'équipe d'infogérance pour assurer la disponibilité des infrastructures clients. Participation au maintien en conditions opérationnelles des serveurs, à la mise en place de solutions de sauvegarde et à la supervision de réseaux multi-sites. Contribution aux interventions sur site pour le déploiement de matériels et la résolution d'incidents utilisateurs."
+      },
+      {
+        "id": "experience-noumea",
+        "title": "Alternance - Mairie de Nouméa",
+        "organization": "Mairie de Nouméa",
+        "period": "2023 - Aujourd'hui",
+        "description": "Membre de l'équipe numérique de la collectivité avec un rôle polyvalent : support utilisateur de niveau 2, gestion du parc et des comptes Active Directory, suivi des projets de modernisation du SI et automatisation de tâches récurrentes. Mise en œuvre de bonnes pratiques de sécurité, rédaction de procédures et coordination avec les prestataires externes pour garantir la continuité des services municipaux."
+      }
+    ],
+    "softSkills": [
+      { "id": "softskill-rigueur", "icon": "🎯", "title": "Rigueur", "description": "Méthodologie structurée et documentation précise" },
+      { "id": "softskill-analyse", "icon": "🔍", "title": "Analyse", "description": "Diagnostic rapide et résolution efficace des problèmes" },
+      { "id": "softskill-collaboration", "icon": "🤝", "title": "Collaboration", "description": "Esprit d'équipe et communication claire" }
+    ],
+    "certifications": [
+      {
+        "id": "cert-ccna",
+        "title": "CCNA: Switching, Routing & Wireless Essentials",
+        "organization": "Cisco Networking Academy",
+        "date": "2023",
+        "summary": "Validation des bases avancées en administration de réseaux, configuration d'équipements Cisco et dépannage d'infrastructures d'entreprise.",
+        "highlights": [
+          "Mise en place complète d'une infrastructure LAN/WAN avec VLANs et routage inter-VLAN.",
+          "Configuration des protocoles OSPF et RSTP pour garantir la résilience du réseau.",
+          "Dépannage des déploiements sans-fil et sécurisation des accès."
+        ],
+        "skills": ["Routage", "Switching", "Sécurité réseau", "Cisco IOS"]
+      },
+      {
+        "id": "cert-azure",
+        "title": "Azure Fundamentals (AZ-900)",
+        "organization": "Microsoft",
+        "date": "2022",
+        "summary": "Compréhension des principes du cloud Microsoft Azure, de la sécurité et de la tarification afin d'accompagner les migrations vers les services managés.",
+        "highlights": [
+          "Cartographie des services IaaS/PaaS/SaaS adaptés aux besoins d'une collectivité.",
+          "Évaluation des modèles de gouvernance et de gestion des identités Azure AD.",
+          "Analyse budgétaire et mise en place d'alertes de consommation."
+        ],
+        "skills": ["Cloud", "Azure", "Sécurité", "FinOps"]
+      },
+      {
+        "id": "cert-itil",
+        "title": "ITIL® 4 Foundation",
+        "organization": "AXELOS",
+        "date": "2021",
+        "summary": "Acquisition des bonnes pratiques de gestion des services IT pour améliorer le support aux utilisateurs et la continuité d'activité.",
+        "highlights": [
+          "Formalisation d'un catalogue de services et d'indicateurs de suivi.",
+          "Optimisation du processus de gestion des incidents et des demandes.",
+          "Animation d'ateliers d'amélioration continue avec les équipes support."
+        ],
+        "skills": ["ITSM", "Gestion des services", "Support utilisateur", "Amélioration continue"]
+      }
+    ],
+    "techWatch": {
+      "badge": "Veille technologique",
+      "title": "Anticiper les évolutions IT",
+      "description": "Une démarche continue pour rester à jour sur les technologies essentielles à mes missions : infrastructure, sécurité et support. Cette veille guide mes choix d'outillage et mes propositions d'améliorations au sein des organisations que j'accompagne.",
+      "focusTopics": [
+        {
+          "id": "focus-infra",
+          "title": "Infrastructure & Cloud",
+          "description": "Surveillance continue des évolutions autour de Proxmox, VMware et des solutions de sauvegarde hybrides. Analyse des nouvelles offres IaaS locales et des impacts budgétaires pour des structures publiques.",
+          "actions": [
+            "Tests réguliers des versions beta de Proxmox VE pour anticiper les migrations.",
+            "Veille sur la redondance des sauvegardes et sur les solutions de PRA accessibles."
+          ]
+        },
+        {
+          "id": "focus-securite",
+          "title": "Sécurité Opérationnelle",
+          "description": "Suivi des publications CERT-FR, bulletins Microsoft et best practices ANSSI pour renforcer les postes et serveurs. Mise à jour des procédures de durcissement et de gestion des incidents.",
+          "actions": [
+            "Mise en place d'alertes RSS et newsletters dédiées à la cybersécurité.",
+            "Ateliers internes pour sensibiliser les équipes sur les nouvelles campagnes de phishing."
+          ]
+        },
+        {
+          "id": "focus-support",
+          "title": "Collaboration & Support",
+          "description": "Exploration des outils d'assistance à distance, de ticketing et d'automatisation (GLPI, ITSM, scripts PowerShell) pour améliorer la qualité de service auprès des utilisateurs.",
+          "actions": [
+            "Comparaison des solutions d'inventaire réseau pour optimiser la gestion de parc.",
+            "Expérimentation d'automatisations PowerShell pour accélérer l'onboarding."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "sources-blogs",
+          "label": "Blogs & Newsletters",
+          "items": [
+            "Blog Proxmox, VMware Tech Journal",
+            "CERT-FR, Zataz, ANSSI",
+            "3CX Updates, Microsoft Learn"
+          ]
+        },
+        {
+          "id": "sources-communautes",
+          "label": "Communautés",
+          "items": [
+            "Réseau Proxmox France, forums Spiceworks",
+            "Groupes Discord/Reddit dédiés à la cybersécurité",
+            "Meetups locaux autour de l'IT en Nouvelle-Calédonie"
+          ]
+        },
+        {
+          "id": "sources-terrain",
+          "label": "Sur le terrain",
+          "items": [
+            "Retours d'expérience des équipes SF2i",
+            "Partage de bonnes pratiques avec la DSI de la Mairie de Nouméa",
+            "Échanges avec les prestataires et partenaires techniques"
+          ]
+        }
+      ],
+      "roadmap": [
+        {
+          "id": "roadmap-q1",
+          "period": "Trimestre 1",
+          "goals": [
+            "Évaluer les nouveautés Proxmox Backup Server 3.x",
+            "Mettre à jour les scripts de supervision pour les serveurs critiques"
+          ]
+        },
+        {
+          "id": "roadmap-q2",
+          "period": "Trimestre 2",
+          "goals": [
+            "Tester l'intégration d'une solution EDR adaptée au secteur public",
+            "Documenter une procédure PRA simplifiée pour les sites secondaires"
+          ]
+        },
+        {
+          "id": "roadmap-q3",
+          "period": "Trimestre 3",
+          "goals": [
+            "Déployer un pilote de gestion de parc automatisée",
+            "Organiser un atelier de sensibilisation sécurité pour les agents"
+          ]
+        }
+      ]
+    }
+  }
 }
