@@ -262,7 +262,17 @@ Modifier les fichiers dans `src/pages/` pour personnaliser :
 3. Dans la carte « Sauvegarde JSON », cliquez sur **Importer un fichier JSON** puis sélectionnez le fichier exporté depuis votre machine.
 4. Après confirmation via la notification, rechargez les pages publiques : vos projets et compétences personnalisés seront instantanément visibles dans ce navigateur.
 
-> ℹ️ Les données sont stockées dans le `localStorage` du domaine. Répétez l'import depuis chaque navigateur qui doit afficher ces contenus personnalisés. Pour figer ces données pour tous les visiteurs, remplacez les constantes `DEFAULT_PROJECTS` et `DEFAULT_SKILLS` dans `src/lib/portfolio-data.tsx` par votre export JSON puis reconstruisez et redéployez l'application.
+> ℹ️ Les données sont stockées dans le `localStorage` du domaine. Répétez l'import depuis chaque navigateur qui doit afficher ces contenus personnalisés. Pour figer ces données pour tous les visiteurs, deux options :
+> - déposer un fichier `portfolio-data.json` (voir ci-dessous) qui sera chargé automatiquement par toutes les sessions ;
+> - ou remplacer manuellement les constantes `DEFAULT_PROJECTS` et `DEFAULT_SKILLS` dans `src/lib/portfolio-data.tsx` puis reconstruire et redéployer l'application.
+
+#### Précharger un export JSON pour tous les visiteurs
+1. Exportez vos données depuis `/admin` puis enregistrez le fichier sur votre poste.
+2. Copiez ce fichier dans le projet sous le nom `public/portfolio-data.json` (vous pouvez vous baser sur l'exemple `public/portfolio-data.example.json`).
+3. Rebuild l'application (`npm run build` ou `docker build ...`). Le fichier sera servi automatiquement et chargé au premier accès, même avant toute connexion à l'admin.
+4. En production, vous pouvez mettre à jour le fichier sans rebuild en le remplaçant directement sur le serveur (ex. `/var/www/portfolio-greg/portfolio-data.json`) ou dans le conteneur Docker (`/usr/share/nginx/html/portfolio-data.json`).
+
+> 💡 Lorsqu'un `portfolio-data.json` est présent, le bouton **Réinitialiser** de l'admin recharge ce fichier au lieu des données par défaut codées en dur.
 
 ## 🔒 Sécurité
 

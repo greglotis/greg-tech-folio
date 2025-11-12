@@ -1,0 +1,81 @@
+{
+  "projects": [
+    {
+      "id": "glpi-ocs",
+      "title": "GLPI & OCS Inventory",
+      "description": "Mise en place d'une solution complète de gestion de parc informatique avec inventaire automatisé et suivi des tickets.",
+      "icon": "database",
+      "technologies": ["GLPI", "OCS Inventory", "MySQL", "PHP", "Apache"],
+      "achievements": [
+        "Inventaire automatique de 100+ postes",
+        "Gestion centralisée des tickets",
+        "Rapports et tableaux de bord personnalisés"
+      ]
+    },
+    {
+      "id": "vlans-cisco",
+      "title": "VLANs Cisco",
+      "description": "Configuration et segmentation réseau avec VLANs sur équipements Cisco pour améliorer la sécurité et les performances.",
+      "icon": "network",
+      "technologies": ["Cisco IOS", "VLANs", "Trunking", "STP", "Routage inter-VLAN"],
+      "achievements": [
+        "Segmentation réseau en 5 VLANs métier",
+        "Configuration de trunking 802.1Q",
+        "Optimisation du routage inter-VLAN"
+      ]
+    },
+    {
+      "id": "proxmox-ad",
+      "title": "Proxmox & Active Directory",
+      "description": "Déploiement d'une infrastructure virtualisée avec Proxmox et intégration d'un domaine Active Directory DS.",
+      "icon": "server",
+      "technologies": ["Proxmox VE", "Windows Server", "Active Directory", "GPO", "DNS"],
+      "achievements": [
+        "Cluster Proxmox haute disponibilité",
+        "Domaine AD avec 3 contrôleurs",
+        "Stratégies de groupe (GPO) avancées"
+      ]
+    },
+    {
+      "id": "serveur-3cx",
+      "title": "Serveur 3CX",
+      "description": "Installation et configuration d'une solution de téléphonie IP 3CX pour les communications d'entreprise.",
+      "icon": "phone",
+      "technologies": ["3CX", "SIP", "VoIP", "Asterisk", "QoS"],
+      "achievements": [
+        "Configuration de 50+ extensions",
+        "Intégration avec le réseau VoIP",
+        "Mise en place de files d'attente et IVR"
+      ]
+    },
+    {
+      "id": "infrastructure-securite",
+      "title": "Infrastructure de Sécurité",
+      "description": "Déploiement de solutions de sécurité réseau incluant pare-feu, VPN et surveillance.",
+      "icon": "shield",
+      "technologies": ["pfSense", "OpenVPN", "IDS/IPS", "Firewall", "Logs"],
+      "achievements": [
+        "Pare-feu pfSense multi-WAN",
+        "VPN site-à-site et client",
+        "Monitoring avec Nagios"
+      ]
+    }
+  ],
+  "skills": [
+    { "id": "windows-server", "name": "Windows Server", "category": "Systèmes", "icon": "monitor" },
+    { "id": "linux", "name": "Linux (Debian/Ubuntu)", "category": "Systèmes", "icon": "server" },
+    { "id": "active-directory", "name": "Active Directory", "category": "Systèmes", "icon": "database" },
+    { "id": "virtualisation-proxmox", "name": "Virtualisation (Proxmox)", "category": "Systèmes", "icon": "boxes" },
+    { "id": "cisco-ios", "name": "Cisco IOS", "category": "Réseau", "icon": "network" },
+    { "id": "vlans-routage", "name": "VLANs & Routage", "category": "Réseau", "icon": "wifi" },
+    { "id": "vpn-securite", "name": "VPN & Sécurité réseau", "category": "Réseau", "icon": "lock" },
+    { "id": "tcp-ip", "name": "TCP/IP", "category": "Réseau", "icon": "globe" },
+    { "id": "glpi", "name": "GLPI", "category": "Services", "icon": "fileText" },
+    { "id": "dns-dhcp", "name": "DNS & DHCP", "category": "Services", "icon": "server" },
+    { "id": "voip-3cx", "name": "3CX / VoIP", "category": "Services", "icon": "phone" },
+    { "id": "apache-nginx", "name": "Apache / Nginx", "category": "Services", "icon": "cloud" },
+    { "id": "pfsense", "name": "pfSense", "category": "Sécurité", "icon": "shield" },
+    { "id": "backup-pra", "name": "Backup & PRA", "category": "Sécurité", "icon": "hardDrive" },
+    { "id": "monitoring-nagios", "name": "Monitoring (Nagios)", "category": "Sécurité", "icon": "activity" }
+  ]
+}
