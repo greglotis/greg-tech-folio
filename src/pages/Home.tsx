@@ -2,8 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Linkedin, Download, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import profilePhoto from "@/assets/profile-photo.jpg";
+import { usePortfolioData } from "@/lib/portfolio-data";
 
 const Home = () => {
+  const { projects, skills } = usePortfolioData();
+  const projectCountLabel = projects.length > 0 ? `${projects.length}+` : "0";
+  const skillCountLabel = skills.length > 0 ? `${skills.length}+` : "0";
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -33,20 +38,21 @@ const Home = () => {
                     <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
                   </Link>
                 </Button>
-                
+
                 <Button asChild variant="outline" size="lg">
                   <a href="/cv-greg.pdf" download>
                     <Download className="mr-2" size={18} />
                     Télécharger CV
                   </a>
                 </Button>
-                
+
                 <Button asChild variant="ghost" size="lg">
                   <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
                     <Linkedin className="mr-2" size={18} />
                     LinkedIn
                   </a>
                 </Button>
+
               </div>
             </div>
 
@@ -70,15 +76,15 @@ const Home = () => {
         <div className="container mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center space-y-2 p-6 rounded-lg bg-card shadow-soft hover:shadow-medium transition-smooth">
-              <div className="text-3xl font-bold text-accent">5+</div>
+              <div className="text-3xl font-bold text-accent">{projectCountLabel}</div>
               <p className="text-muted-foreground">Projets réalisés</p>
             </div>
-            
+
             <div className="text-center space-y-2 p-6 rounded-lg bg-card shadow-soft hover:shadow-medium transition-smooth">
-              <div className="text-3xl font-bold text-accent">10+</div>
+              <div className="text-3xl font-bold text-accent">{skillCountLabel}</div>
               <p className="text-muted-foreground">Technologies maîtrisées</p>
             </div>
-            
+
             <div className="text-center space-y-2 p-6 rounded-lg bg-card shadow-soft hover:shadow-medium transition-smooth">
               <div className="text-3xl font-bold text-accent">100%</div>
               <p className="text-muted-foreground">Engagement professionnel</p>
@@ -107,6 +113,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+
     </div>
   );
 };
