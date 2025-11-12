@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b3a1f" />
+      <stop offset="100%" stop-color="#145733" />
+    </linearGradient>
+    <style>
+      @font-face {
+        font-family: 'DejaVu Sans Mono';
+        src: local('DejaVu Sans Mono'), local('Courier New'), local('monospace');
+      }
+      .binary { font-family: 'DejaVu Sans Mono', monospace; fill: rgba(120, 200, 140, 0.35); font-size: 42px; }
+    </style>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)" />
+  <g opacity="0.65">
+    <text class="binary" x="70" y="160">01001011 00110110 01001110</text>
+    <text class="binary" x="140" y="260">11001100 10101010 01010010</text>
+    <text class="binary" x="180" y="360">00110010 01101110 10101100</text>
+    <text class="binary" x="120" y="460">10100111 01001010 00111001</text>
+    <text class="binary" x="240" y="560">00110011 11100010 00110101</text>
+    <text class="binary" x="320" y="660">01001001 00101110 01010100</text>
+    <text class="binary" x="420" y="760">11100101 00011010 11001110</text>
+    <text class="binary" x="520" y="220">00110110 01011001 00011001</text>
+    <text class="binary" x="600" y="320">01001101 11001010 00011100</text>
+    <text class="binary" x="640" y="420">00111100 00110101 01010110</text>
+    <text class="binary" x="680" y="520">01011010 01001111 01000101</text>
+    <text class="binary" x="720" y="620">00110010 01111001 01100011</text>
+    <text class="binary" x="760" y="720">11001001 01001000 10100101</text>
+  </g>
+  <g id="figure">
+    <path d="M260 910C320 760 388 702 512 704C636 706 704 758 764 910Z" fill="#0c3147" />
+    <path d="M340 760L482 714C506 706 522 706 544 714L688 760L648 884L512 842L376 884Z" fill="#0f3b55" />
+    <path d="M472 712L512 600L552 712L520 732C510 738 494 738 484 732Z" fill="#101c2b" />
+    <path d="M450 712L512 600L574 712L620 780C566 816 528 836 512 836C496 836 458 816 404 780Z" fill="#11273a" />
+    <path d="M512 560C580 560 632 504 632 432C632 360 580 308 512 308C444 308 392 360 392 432C392 504 444 560 512 560Z" fill="#d49c6c" />
+    <path d="M512 314C636 314 680 380 688 460C692 504 616 528 512 528C408 528 332 504 336 460C344 380 388 314 512 314Z" fill="#1c120c" />
+    <path d="M340 456C372 408 420 404 420 404L392 480Z" fill="#1c120c" />
+    <path d="M684 456C652 408 604 404 604 404L632 480Z" fill="#1c120c" />
+    <path d="M456 452C464 436 488 424 512 424C536 424 560 436 568 452C564 468 540 480 512 480C484 480 460 468 456 452Z" fill="#1a0f09" />
+    <path d="M452 520C484 536 540 536 572 520C548 500 528 492 512 492C496 492 476 500 452 520Z" fill="#1a0f09" />
+    <path d="M452 532C468 548 492 556 512 556C532 556 556 548 572 532C548 568 528 580 512 580C496 580 476 568 452 532Z" fill="#2f1c12" />
+    <ellipse cx="454" cy="440" rx="32" ry="26" fill="#f5f5f5" />
+    <ellipse cx="570" cy="440" rx="32" ry="26" fill="#f5f5f5" />
+    <circle cx="458" cy="440" r="10" fill="#1a1a1a" />
+    <circle cx="566" cy="440" r="10" fill="#1a1a1a" />
+    <path d="M430 410H484" stroke="#1c120c" stroke-width="12" stroke-linecap="round" />
+    <path d="M540 410H594" stroke="#1c120c" stroke-width="12" stroke-linecap="round" />
+    <path d="M448 520C468 544 484 552 512 552C540 552 556 544 576 520" stroke="#2c1810" stroke-width="10" stroke-linecap="round" />
+    <path d="M388 912C408 852 468 818 512 818C556 818 616 852 636 912" stroke="#0a2738" stroke-width="24" stroke-linecap="round" />
+    <path d="M320 780C372 760 444 748 512 748C580 748 652 760 704 780L672 864L568 836C540 828 484 828 456 836L352 864Z" fill="#113147" />
+    <path d="M360 838C400 820 468 808 512 808C556 808 624 820 664 838L648 884L512 848L376 884Z" fill="#0e2b3f" />
+    <path d="M360 838L376 884L348 892Z" fill="#d0d8e4" />
+    <path d="M664 838L648 884L676 892Z" fill="#d0d8e4" />
+    <path d="M420 912L512 872L604 912L512 952Z" fill="#0a2332" />
+    <path d="M480 580H544L512 632Z" fill="#e6ecf6" />
+  </g>
+</svg>
