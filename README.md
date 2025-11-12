@@ -176,6 +176,22 @@ docker run -d \
 
 Le serveur Nginx embarqué sert les fichiers statiques sur le port 80 du conteneur. Exposez ce port selon votre architecture.
 
+### 2bis. Reconstruire et relancer avec les mêmes paramètres
+
+Pour remplacer une instance existante (par exemple exposée sur le port 8050 comme dans `docker ps`), arrêtez puis supprimez le conteneur avant de rebuilder et relancer avec les mêmes options :
+
+```bash
+docker stop greg-portfolio && docker rm greg-portfolio
+docker build -t greg-portfolio:latest .
+docker run -d \
+  --name greg-portfolio \
+  --restart unless-stopped \
+  -p 8050:80 \
+  greg-portfolio:latest
+```
+
+Adaptez le port hôte (`8050` dans l'exemple) si votre reverse-proxy ou pare-feu impose un autre mapping.
+
 ### 3. Intégrer avec votre reverse-proxy Nginx
 
 Si un reverse-proxy Nginx externe est déjà en place (par exemple un conteneur séparé gérant plusieurs sites) :
@@ -197,14 +213,6 @@ location / {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
 }
-```
-
-Le conteneur peut être mis à jour en reconstruisant l'image puis en redémarrant :
-
-```bash
-docker build -t greg-portfolio:latest .
-docker stop greg-portfolio && docker rm greg-portfolio
-docker run -d --name greg-portfolio --restart unless-stopped -p 8080:80 greg-portfolio:latest
 ```
 
 Pensez à automatiser le déploiement (GitHub Actions, GitLab CI, Watchtower…) pour maintenir l'application à jour.
