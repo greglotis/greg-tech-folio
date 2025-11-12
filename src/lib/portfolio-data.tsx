@@ -38,6 +38,8 @@ interface PortfolioDataContextValue {
   updateSkill: (skillId: string, skill: SkillInput) => void;
   deleteSkill: (skillId: string) => void;
   resetData: () => void;
+  exportData: () => StoredData;
+  importData: (data: unknown) => void;
 }
 
 const STORAGE_KEY = "portfolio-data";
@@ -46,6 +48,8 @@ type StoredData = {
   projects: Project[];
   skills: Skill[];
 };
+
+export type PortfolioDataSnapshot = StoredData;
 
 const DEFAULT_PROJECTS: Project[] = [
   {
@@ -155,25 +159,71 @@ const cloneSkills = (skills: Skill[]): Skill[] => skills.map((skill) => ({ ...sk
 const isIconKey = (value: unknown): value is IconKey =>
   typeof value === "string" && value in iconLibrary;
 
-const sanitizeProject = (project: Partial<Project>): Project => ({
-  id: typeof project.id === "string" ? project.id : createId(),
-  title: typeof project.title === "string" && project.title.trim().length > 0 ? project.title : "Projet sans titre",
-  description: typeof project.description === "string" ? project.description : "",
-  icon: isIconKey(project.icon) ? project.icon : DEFAULT_ICON,
-  technologies: Array.isArray(project.technologies)
-    ? project.technologies.filter((tech) => typeof tech === "string" && tech.trim().length > 0)
-    : [],
-  achievements: Array.isArray(project.achievements)
-    ? project.achievements.filter((item) => typeof item === "string" && item.trim().length > 0)
-    : []
-});
+const sanitizeProject = (project: unknown): Project => {
+  const safeProject = project && typeof project === "object" ? (project as Partial<Project>) : {};
 
-const sanitizeSkill = (skill: Partial<Skill>): Skill => ({
-  id: typeof skill.id === "string" ? skill.id : createId(),
-  name: typeof skill.name === "string" && skill.name.trim().length > 0 ? skill.name : "Compétence",
-  category: typeof skill.category === "string" && skill.category.trim().length > 0 ? skill.category : "Autre",
-  icon: isIconKey(skill.icon) ? skill.icon : DEFAULT_ICON
-});
+  return {
+    id: typeof safeProject.id === "string" ? safeProject.id : createId(),
+    title:
+      typeof safeProject.title === "string" && safeProject.title.trim().length > 0
+        ? safeProject.title
+        : "Projet sans titre",
+    description: typeof safeProject.description === "string" ? safeProject.description : "",
+    icon: isIconKey(safeProject.icon) ? safeProject.icon : DEFAULT_ICON,
+    technologies: Array.isArray(safeProject.technologies)
+      ? safeProject.technologies.filter((tech) => typeof tech === "string" && tech.trim().length > 0)
+      : [],
+    achievements: Array.isArray(safeProject.achievements)
+      ? safeProject.achievements.filter((item) => typeof item === "string" && item.trim().length > 0)
+      : []
+  };
+};
+
+const sanitizeSkill = (skill: unknown): Skill => {
+  const safeSkill = skill && typeof skill === "object" ? (skill as Partial<Skill>) : {};
+
+  return {
+    id: typeof safeSkill.id === "string" ? safeSkill.id : createId(),
+    name:
+      typeof safeSkill.name === "string" && safeSkill.name.trim().length > 0 ? safeSkill.name : "Compétence",
+    category:
+      typeof safeSkill.category === "string" && safeSkill.category.trim().length > 0
+        ? safeSkill.category
+        : "Autre",
+    icon: isIconKey(safeSkill.icon) ? safeSkill.icon : DEFAULT_ICON
+  };
+};
+
+const sanitizeStoredData = (data: unknown, fallback: StoredData): StoredData => {
+  if (!data || typeof data !== "object") {
+    throw new Error("Format de données JSON invalide");
+  }
+
+  const partial = data as Partial<StoredData>;
+  const hasProjects = Object.prototype.hasOwnProperty.call(partial, "projects");
+  const hasSkills = Object.prototype.hasOwnProperty.call(partial, "skills");
+
+  if (!hasProjects && !hasSkills) {
+    throw new Error("Le fichier JSON ne contient ni projets ni compétences");
+  }
+
+  const projects = hasProjects
+    ? Array.isArray(partial.projects)
+      ? partial.projects.map((project) => sanitizeProject(project))
+      : fallback.projects
+    : fallback.projects;
+
+  const skills = hasSkills
+    ? Array.isArray(partial.skills)
+      ? partial.skills.map((skill) => sanitizeSkill(skill))
+      : fallback.skills
+    : fallback.skills;
+
+  return {
+    projects,
+    skills
+  };
+};
 
 export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => {
   const [projects, setProjects] = useState<Project[]>(() => cloneProjects(DEFAULT_PROJECTS));
@@ -190,15 +240,14 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
       const stored = window.localStorage.getItem(STORAGE_KEY);
 
       if (stored) {
-        const parsed = JSON.parse(stored) as Partial<StoredData>;
+        const parsed = JSON.parse(stored);
+        const sanitized = sanitizeStoredData(parsed, {
+          projects: DEFAULT_PROJECTS,
+          skills: DEFAULT_SKILLS
+        });
 
-        if (Array.isArray(parsed.projects)) {
-          setProjects(cloneProjects(parsed.projects.map(sanitizeProject)));
-        }
-
-        if (Array.isArray(parsed.skills)) {
-          setSkills(cloneSkills(parsed.skills.map(sanitizeSkill)));
-        }
+        setProjects(cloneProjects(sanitized.projects));
+        setSkills(cloneSkills(sanitized.skills));
       }
     } catch (error) {
       console.error("Impossible de charger les données du portfolio", error);
@@ -212,10 +261,10 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
       return;
     }
 
-    const dataToStore: StoredData = {
-      projects: projects.map(sanitizeProject),
-      skills: skills.map(sanitizeSkill)
-    };
+    const dataToStore = {
+      projects: projects.map((project) => sanitizeProject(project)),
+      skills: skills.map((skill) => sanitizeSkill(skill))
+    } satisfies StoredData;
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToStore));
   }, [projects, skills, isLoaded]);
@@ -257,6 +306,18 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
     setSkills(cloneSkills(DEFAULT_SKILLS));
   };
 
+  const exportData = (): StoredData => ({
+    projects: projects.map((project) => sanitizeProject(project)),
+    skills: skills.map((skill) => sanitizeSkill(skill))
+  });
+
+  const importData = (data: unknown) => {
+    const sanitized = sanitizeStoredData(data, { projects, skills });
+
+    setProjects(cloneProjects(sanitized.projects));
+    setSkills(cloneSkills(sanitized.skills));
+  };
+
   const value = useMemo<PortfolioDataContextValue>(() => ({
     projects,
     skills,
@@ -266,7 +327,9 @@ export const PortfolioDataProvider = ({ children }: { children: ReactNode }) => 
     addSkill,
     updateSkill,
     deleteSkill,
-    resetData
+    resetData,
+    exportData,
+    importData
   }), [projects, skills]);
 
   return <PortfolioDataContext.Provider value={value}>{children}</PortfolioDataContext.Provider>;
