@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Linkedin, Download, ArrowRight } from "lucide-react";
+import { Linkedin, Download, ArrowRight, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import profilePhoto from "@/assets/profile-photo.svg";
 import { usePortfolioData } from "@/lib/portfolio-data";
@@ -77,6 +77,7 @@ const Home = () => {
                     {hero.tertiaryCtaLabel}
                   </a>
                 </Button>
+
               </div>
             </div>
 
@@ -127,6 +128,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+
     </div>
   );
 };
