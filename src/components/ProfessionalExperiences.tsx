@@ -7,7 +7,7 @@ const ProfessionalExperiences = () => {
           <div className="p-8 rounded-xl bg-card shadow-soft hover:shadow-medium transition-smooth">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-2xl font-semibold">Stage - SF2i</h3>
-              <span className="text-sm font-medium text-muted-foreground">2023</span>
+              <span className="text-sm font-medium text-muted-foreground">2024</span>
             </div>
             <p className="text-muted-foreground leading-relaxed">
               Immersion au sein de l'équipe d'infogérance pour assurer la disponibilité des infrastructures
@@ -21,7 +21,7 @@ const ProfessionalExperiences = () => {
           <div className="p-8 rounded-xl bg-card shadow-soft hover:shadow-medium transition-smooth">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-2xl font-semibold">Alternance - Mairie de Nouméa</h3>
-              <span className="text-sm font-medium text-muted-foreground">2023 - Aujourd'hui</span>
+              <span className="text-sm font-medium text-muted-foreground">2025 - Aujourd'hui</span>
             </div>
             <p className="text-muted-foreground leading-relaxed">
               Membre de l'équipe numérique de la collectivité avec un rôle polyvalent : support utilisateur de
