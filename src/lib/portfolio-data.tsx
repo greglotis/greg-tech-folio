@@ -212,7 +212,7 @@ const DEFAULT_CERTIFICATIONS: Certification[] = [
     id: "ccna",
     title: "CCNA: Switching, Routing & Wireless Essentials",
     organization: "Cisco Networking Academy",
-    date: "2023",
+    date: "2024",
     summary:
       "Validation des bases avancées en administration de réseaux, configuration d'équipements Cisco et dépannage d'infrastructures d'entreprise.",
     highlights: [
