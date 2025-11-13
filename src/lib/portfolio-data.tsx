@@ -129,7 +129,7 @@ const DEFAULT_PROJECTS: Project[] = [
     icon: "database",
     technologies: ["GLPI", "OCS Inventory", "MySQL", "PHP", "Apache"],
     achievements: [
-      "Inventaire automatique de 100+ postes",
+      "Inventaires automatique de 100+ postes",
       "Gestion centralisée des tickets",
       "Rapports et tableaux de bord personnalisés"
     ]
@@ -224,31 +224,42 @@ const DEFAULT_CERTIFICATIONS: Certification[] = [
   },
   {
     id: "az900",
-    title: "Azure Fundamentals (AZ-900)",
-    organization: "Microsoft",
-    date: "2022",
+    title: "Notions de Base en Réseaux",
+    organization: "Cisco",
+    date: "2024",
     summary:
-      "Compréhension des principes du cloud Microsoft Azure, de la sécurité et de la tarification afin d'accompagner les migrations vers les services managés.",
+      "Appréhension des concepts de base des réseaux, de l'Internet et de la communication entre les équipements informatiques.",
     highlights: [
-      "Cartographie des services IaaS/PaaS/SaaS adaptés aux besoins d'une collectivité.",
-      "Évaluation des modèles de gouvernance et de gestion des identités Azure AD.",
-      "Analyse budgétaire et mise en place d'alertes de consommation."
+      "- Mise en place d'une infrastructure réseau",
+          "- Configuration et gestion des routeurs et switches",
+          "- Sécurisation des accès réseau",
+          "- Dépannage des problèmes de connectivité",
+          "- Protocoles de communication utilisés sur Internet (TCP/IP",
+          "DNS",
+          "DHCP)"
     ],
-    skills: ["Cloud", "Azure", "Sécurité", "FinOps"]
+    skills: ["Routage",
+          "Switching",
+          "Sécurité et Protocoles"]
   },
   {
     id: "itil4",
-    title: "ITIL® 4 Foundation",
-    organization: "AXELOS",
-    date: "2021",
+    title: "Introduction a la cybersécurité",
+    organization: "Cisco",
+    date: "2024",
     summary:
-      "Acquisition des bonnes pratiques de gestion des services IT pour améliorer le support aux utilisateurs et la continuité d'activité.",
+      "Cette certification permet d'acquérir une compréhension des fondamentaux de la cybersécurité, des menaces potentielles, ainsi que des bonnes pratiques pour protéger les systèmes informatiques. Elle aborde également les bases des technologies de sécurité utilisées pour se défendre contre les attaques et les vulnérabilités.",
     highlights: [
-      "Formalisation d'un catalogue de services et d'indicateurs de suivi.",
-      "Optimisation du processus de gestion des incidents et des demandes.",
-      "Animation d'ateliers d'amélioration continue avec les équipes support."
+     "- Comprendre les principes de base de la cybersécurité",
+          "- Identifier les menaces et les vulnérabilités",
+          "- Protéger les systèmes et réseaux contre les attaques",
+          "- Utiliser des outils de cybersécurité pour détecter et prévenir les intrusions"
     ],
-    skills: ["ITSM", "Gestion des services", "Support utilisateur", "Amélioration continue"]
+    skills: ["Cybersécurité",
+          "Protection",
+          "Gestion des risques",
+          "Cryptographie",
+          "Analyse des menaces"]
   }
 ];
 
